@@ -1,0 +1,7 @@
+# This code is great for directories where "NO" script should be run from
+# but for whatever reason, you need Directory permissions to be 777 - which is wide-open and insecure by itself.
+# Examples Directories would include: any 'images' dir., the 'bmz' dir. if using ImageHandler 2, the html_includes languages folder, etc
+
+# Prevent directory viewing and the ability of any scripts to run.
+# No type of script, be it PHP, PERL or whatever can normally be executed if ExecCGI is disabled.
+OPTIONS -Indexes -ExecCGI

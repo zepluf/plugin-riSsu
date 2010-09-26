@@ -1,0 +1,22 @@
+As of now, SSU insert identifiers to check if the link is a category page, or a product info page, and to check the product type of the product.
+
+So, make sure that none of your defined page has these in its name:
+DELIMITERcDELIMITER
+DELIMITERpDELIMITER
+DELIMITERmDELIMITER
+DELIMITERgDELIMITER
+DELIMITERdDELIMITER
+DELIMITERfDELIMITER
+
+DELIMITER can be set in admin as either "-" or "_", so for example, if you chose "-" (default) you should avoid:
+-c-
+-p-
+-m-
+-g-
+-d-
+-f-
+
+It's also smart to avoid those in your query string.
+But don't worry too much, I'm 100% sure that the default ZC does not have these, and all add-on modules I have seen so far do not have these as well.
+
+You do NOT have to avoid those in your category/product names, they will be automatically removed when used in links.

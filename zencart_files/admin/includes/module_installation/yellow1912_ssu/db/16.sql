@@ -1,0 +1,1 @@
+UPDATE configuration SET configuration_title = 'Hide default language identifier' WHERE configuration_key = 'SSU_MULTI_LANGUAGE_DEFAULT_IDENTIFIER';

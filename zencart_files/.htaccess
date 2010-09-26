@@ -1,0 +1,14 @@
+#### BOF SSU
+Options +FollowSymLinks -MultiViews
+RewriteEngine On
+# Make sure to change "zencart" to the subfolder you install ZC. If you use root folder, change to: RewriteBase / 
+RewriteBase /zencart/
+
+# Deny access from .htaccess
+RewriteRule ^\.htaccess$ - [F]
+
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteCond %{SCRIPT_FILENAME} !-d
+#RewriteRule ^(.*) index.php?/$1 [E=VAR1:$1,QSA,L]
+RewriteRule ^(.+) index.php/$1 [E=VAR1:$1,QSA,L,PT]
+#### EOF SSU
