@@ -73,20 +73,20 @@
 				if($is_languages_code){
 					$this->original_uri   = trim(substr($this->original_uri, 2), '/');
 				}
-				$_get['language'] = $languages_code;
+				$ssu_get['language'] = $languages_code;
 			}
 				
 			
 			if(empty($this->original_uri)){
-				$_get['main_page'] = 'index';
+				$ssu_get['main_page'] = 'index';
 			}
 			else{			
 				// if we have a link like this http://site.com/en/?blah=blahblah, we assume it is an index page
 				if(substr($this->original_uri, 0, 1) == '?'){
-					parse_str(trim($this->original_uri, '?'), $_get);
-					if(!isset($_get['main_page']))
-						$_get['main_page'] = 'index';
-					$this->rebuildENV($_get, $catalog_dir);
+					parse_str(trim($this->original_uri, '?'), $ssu_get);
+					if(!isset($ssu_get['main_page']))
+						$ssu_get['main_page'] = 'index';
+					$this->rebuildENV($ssu_get, $catalog_dir);
 					$this->redirect_type = 1;
 					return false;
 				}
@@ -101,20 +101,6 @@
 						else 
 						$this->redirect(HTTP_SERVER . DIR_WS_CATALOG.implode("&", $uri_parts));
 					}
-
-					//$alias_filename = md5(trim($uri_parts[0], '/'));
-					// comment out since we dont cache anymore
-					
-					/*if(($alias_get = SSUCache::read($alias_filename, 'aliases', true)) !== false)
-					{
-						if(isset($uri_parts[1])) $alias_get .= "&{$uri_parts[1]}";
-						parse_str($alias_get, $_get);
-						if(isset($languages_code)) $_get['language'] = $languages_code;
-						$this->rebuildENV($_get, $catalog_dir);	
-						$this->redirect_type = 1;
-						return true;
-					}
-					*/
 					else{
 						SSUAlias::aliasToLink($uri_parts[0]);
 						$this->original_uri = isset($uri_parts[1]) ? $uri_parts[0].'?'.$uri_parts[1] : $uri_parts[0];
@@ -127,18 +113,18 @@
 				$parts = explode('/', preg_replace('/\/\/+/', '/', $this->original_uri));		
 
 				// identify and assign main page
-				if(!isset($_get['main_page'])){
+				if(!isset($ssu_get['main_page'])){
 					$parsers = SSUConfig::registry('plugins', 'parsers');
 					foreach($parsers as $key => $parser)
-						if(call_user_func_array(array("{$parser}Parser", "identifyPage"), array(&$parts, &$_get))){
+						if(call_user_func_array(array("{$parser}Parser", "identifyPage"), array(&$parts, &$ssu_get))){
 							unset($parsers[$key]);
 							$this->redirect_type = 1;
 							break;
 						}
 						
 					// found nothing?
-					if(!isset($_get['main_page'])){
-						$_get['main_page'] = $parts[0];
+					if(!isset($ssu_get['main_page'])){
+						$ssu_get['main_page'] = $parts[0];
 						unset($parts[0]);
 					}
 				}
@@ -153,7 +139,7 @@
 					$parser_encountered = false;
 					foreach($parsers as $key => $parser){
 						if(call_user_func_array(array("{$parser}Parser", "identifyName"), array($parts[$counter]))){
-							call_user_func_array(array("{$parser}Parser", "updateGet"), array($parts[$counter], &$_get));
+							call_user_func_array(array("{$parser}Parser", "updateGet"), array($parts[$counter], &$ssu_get));
 							$this->redirect_type = 1;
 							$parser_encountered = true;
 							unset($parsers[$key]);
@@ -161,15 +147,15 @@
 						}
 					}
 					if(!$parser_encountered)
-						$_get[$parts[$counter]] = isset($parts[$counter+1]) ? $parts[++$counter] : '';
+						$ssu_get[$parts[$counter]] = isset($parts[$counter+1]) ? $parts[++$counter] : '';
 				}
 
 				// remove extension, it's in the link just for show 
 				$extension = SSUConfig::registry('configs', 'extension');
 				if(!empty($extension))
-					$_get['main_page'] = str_replace(".$extension", '', $_get['main_page']);
+					$ssu_get['main_page'] = str_replace(".$extension", '', $ssu_get['main_page']);
 				}
-				$this->rebuildENV($_get, $catalog_dir);
+				$this->rebuildENV($ssu_get, $catalog_dir);
 			
 			return true;
 		}
@@ -258,8 +244,8 @@
 		 *
 		 * @param unknown_type $_get
 		 */
-		protected function rebuildENV($_get, $catalog_dir){
-			$_GET = $_get;
+		protected function rebuildENV($ssu_get, $catalog_dir){
+			$_GET = $ssu_get;
 			$_REQUEST = array_merge($_REQUEST, $_GET);
 			// rebuild $PHP_SELF which is used by ZC in several places
 			$GLOBALS['PHP_SELF'] = $catalog_dir.'index.php';

@@ -96,7 +96,7 @@ class SSUParser{
 	* Gets int id from a string (product/category name)
 	*/
 	static protected function getID($string, $delimiter){
-		return end(explode($delimiter, $string));
+		return (int)end(explode($delimiter, $string));
 	}
 	
 }

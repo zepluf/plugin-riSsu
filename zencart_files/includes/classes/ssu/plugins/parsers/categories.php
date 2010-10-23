@@ -94,9 +94,9 @@ class categoriesParser extends SSUParser{
 		// do not trust the passed cPath, always rebuild it
 		$current_categories_id = self::getID($cPath, '_');
 		$category_ids = array();
-		zen_get_parent_categories($category_ids, $current_categories_id);	
+		zen_get_parent_categories($category_ids, (int)$current_categories_id);	
 		$category_ids = array_reverse($category_ids);
-		$category_ids[] = $current_categories_id;
+		$category_ids[] = (int)$current_categories_id;
 		return implode('_' , $category_ids);
 	}
 	
