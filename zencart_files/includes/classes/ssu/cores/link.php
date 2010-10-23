@@ -83,9 +83,8 @@
 			else{			
 				// if we have a link like this http://site.com/en/?blah=blahblah, we assume it is an index page
 				if(substr($this->original_uri, 0, 1) == '?'){
-					parse_str(trim($this->original_uri, '?'), $ssu_get);
-					if(!isset($ssu_get['main_page']))
-						$ssu_get['main_page'] = 'index';
+					parse_str(trim($this->original_uri, '?'), $temp_ssu_get);
+					$ssu_get = array_merge($temp_ssu_get, $ssu_get);
 					$this->rebuildENV($ssu_get, $catalog_dir);
 					$this->redirect_type = 1;
 					return false;
@@ -188,7 +187,7 @@
             $regenerated_link = $this->ssu_link($this->original_uri, '', $request_type, true, true, false, true, false);
         }
 
-        if(isset($regenerated_link) && ($this->curPageURL() != $regenerated_link)){
+        if($regenerated_link !== false && ($this->curPageURL() != $regenerated_link)){
 
             $this->redirect($regenerated_link);
         }
