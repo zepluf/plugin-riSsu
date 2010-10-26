@@ -18,7 +18,8 @@
 		 */
 		public function parseURL(){
 			global $request_type;
-
+			$ssu_get = array();
+			
 			// get out if SSU is off or this is not an index.php page		
 			if(!SSUConfig::registry('configs', 'status') || (end(explode(DIRECTORY_SEPARATOR, $_SERVER["SCRIPT_FILENAME"])) != 'index.php'))
 				return false;
@@ -187,7 +188,7 @@
             $regenerated_link = $this->ssu_link($this->original_uri, '', $request_type, true, true, false, true, false);
         }
 
-        if($regenerated_link !== false && ($this->curPageURL() != $regenerated_link)){
+        if($regenerated_link != '' && ($this->curPageURL() != $regenerated_link)){
 
             $this->redirect($regenerated_link);
         }
@@ -244,7 +245,7 @@
 		 * @param unknown_type $_get
 		 */
 		protected function rebuildENV($ssu_get, $catalog_dir){
-			$_GET = $ssu_get;
+			$_GET = array_merge($_REQUEST, $ssu_get);
 			$_REQUEST = array_merge($_REQUEST, $_GET);
 			// rebuild $PHP_SELF which is used by ZC in several places
 			$GLOBALS['PHP_SELF'] = $catalog_dir.'index.php';
