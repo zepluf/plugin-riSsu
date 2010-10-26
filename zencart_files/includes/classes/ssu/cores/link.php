@@ -245,7 +245,7 @@
 		 * @param unknown_type $_get
 		 */
 		protected function rebuildENV($ssu_get, $catalog_dir){
-			$_GET = array_merge($_REQUEST, $ssu_get);
+			$_GET = array_merge($_GET, $ssu_get);
 			$_REQUEST = array_merge($_REQUEST, $_GET);
 			// rebuild $PHP_SELF which is used by ZC in several places
 			$GLOBALS['PHP_SELF'] = $catalog_dir.'index.php';
