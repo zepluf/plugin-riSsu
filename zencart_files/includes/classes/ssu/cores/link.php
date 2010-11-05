@@ -27,7 +27,7 @@
 			// remove the catalog dir from the link	
 			$catalog_dir = SSUConfig::registry('paths', 'catalog');
 			$regex = array('/'.str_replace('/','\/', $catalog_dir).'/');
-			$this->request_uri = urldecode($this->requestUri());
+			$this->request_uri = $this->requestUri();
 			$this->original_uri = trim($catalog_dir=='/' ? $this->request_uri : preg_replace($regex,'', $this->request_uri, 1), '/');
 
 			// if the index.php is in the url, lets see if we need to rebuild the path and redirect.
@@ -179,7 +179,7 @@
              if(isset($temp[zen_session_name()])) unset($temp[zen_session_name()]);
             
              foreach($temp as $key => $value)
-                $params .= '&' . $key . '=' . urlencode($value);
+                $params .= '&' . $key . '=' . $value;
 
             $regenerated_link = $this->ssu_link($page, $params, $request_type, true, true, false, true, false);
             
