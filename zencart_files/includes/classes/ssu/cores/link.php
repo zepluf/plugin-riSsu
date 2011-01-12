@@ -74,7 +74,9 @@
 				if($is_languages_code){
 					$this->original_uri   = trim(substr($this->original_uri, 2), '/');
 				}
-				$ssu_get['language'] = $languages_code;
+				// we commented this out and assign the language directly here because zencart will do a redirect if the language exists in GET
+				// $ssu_get['language'] = $languages_code;
+	
 			}
 				
 			
