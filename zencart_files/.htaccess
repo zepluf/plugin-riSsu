@@ -9,6 +9,8 @@ RewriteRule ^\.htaccess$ - [F]
 
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteCond %{SCRIPT_FILENAME} !-d
-#RewriteRule ^(.*) index.php?/$1 [E=VAR1:$1,QSA,L]
 RewriteRule ^(.+) index.php/$1 [E=VAR1:$1,QSA,L,PT]
+# alternative rewrite rule, seem to work on GoDaddy hosts http://codeigniter.com/wiki/Godaddy_Installaton_Tips/
+# to use it, please make sure you comment out the rewrite rule above, then uncomment the line below
+# RewriteRule ^(.*)$ /index.php?$1 [L] 
 #### EOF SSU
