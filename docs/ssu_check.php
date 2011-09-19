@@ -41,11 +41,11 @@
 		
 		$messageStack->add('ssu', 'Suggested .htaccess content','warning');
 		if($https_catalog == $http_catalog){
-			$messageStack->add(	'ssu', "<textarea cols=50 rows=20 style='overflow:hidden;'>#### BOF SSU \nOptions +FollowSymLinks -MultiViews \n\nRewriteEngine On \n\nRewriteBase $https_catalog \n\n# Deny access from .htaccess \nRewriteRule ^\.htaccess$ - [F] \n\nRewriteCond %{SCRIPT_FILENAME} !-f \nRewriteCond %{SCRIPT_FILENAME} !-d \nRewriteRule ^(.*) index.php?/$1 [E=VAR1:$1,QSA,L] \n\n#### EOF SSU</textarea>",'success');
+			$messageStack->add(	'ssu', "<textarea cols=50 rows=20 style='overflow:auto;'>#### BOF SSU \nOptions +FollowSymLinks -MultiViews \n\nRewriteEngine On \n\nRewriteBase $https_catalog \n\n# Deny access from .htaccess \nRewriteRule ^\.htaccess$ - [F] \n\nRewriteCond %{SCRIPT_FILENAME} !-f \nRewriteCond %{SCRIPT_FILENAME} !-d \nRewriteRule ^(.*) index.php?/$1 [E=VAR1:$1,QSA,L] \n\n#### EOF SSU</textarea>",'success');
 		}
 		else{
 			$sub_folder = trim(str_replace($http_catalog, '', $https_catalog), '/');
-			$messageStack->add(	'ssu', "<textarea style='overflow:hidden;'>#### BOF SSU \nOptions +FollowSymLinks -MultiViews \nRewriteEngine On \nRewriteBase $https_catalog \n\n# Deny access from .htaccess \nRewriteRule ^\.htaccess$ - [F] \n \nRewriteCond %{SCRIPT_FILENAME} !-f \nRewriteCond %{SCRIPT_FILENAME} !-d \nRewriteRule ^(.*) index.php?/$1 [E=VAR1:$1,QSA] \n \n# STRIP THE REWRITEBASE RULE FROM NON-SSL CONNECTIONS. \nRewriteCond %{SERVER_PORT} 80 \nRewriteCond %{REQUEST_URI} ^/$sub_folder/ \nRewriteRule ^(.*) {$http_catalog}index.php?/$1 [E=VAR1:$1,QSA,L] \n#### EOF SSU</textarea>",'success');
+			$messageStack->add(	'ssu', "<textarea style='overflow:auto;'>#### BOF SSU \nOptions +FollowSymLinks -MultiViews \nRewriteEngine On \nRewriteBase $https_catalog \n\n# Deny access from .htaccess \nRewriteRule ^\.htaccess$ - [F] \n \nRewriteCond %{SCRIPT_FILENAME} !-f \nRewriteCond %{SCRIPT_FILENAME} !-d \nRewriteRule ^(.*) index.php?/$1 [E=VAR1:$1,QSA] \n \n# STRIP THE REWRITEBASE RULE FROM NON-SSL CONNECTIONS. \nRewriteCond %{SERVER_PORT} 80 \nRewriteCond %{REQUEST_URI} ^/$sub_folder/ \nRewriteRule ^(.*) {$http_catalog}index.php?/$1 [E=VAR1:$1,QSA,L] \n#### EOF SSU</textarea>",'success');
 		}
 	}
 	
