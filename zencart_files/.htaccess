@@ -2,7 +2,7 @@
 Options +FollowSymLinks -MultiViews
 RewriteEngine On
 # Make sure to change "zencart" to the subfolder you install ZC. If you use root folder, change to: RewriteBase / 
-RewriteBase /zencart/
+RewriteBase /
 
 # Deny access from .htaccess
 RewriteRule ^\.htaccess$ - [F]

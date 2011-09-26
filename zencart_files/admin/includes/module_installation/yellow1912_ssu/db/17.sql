@@ -7,4 +7,4 @@ CREATE TABLE `ssu_cache` (
   `file` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `type` (`type`,`referring_id`,`file`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

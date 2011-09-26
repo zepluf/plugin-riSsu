@@ -6,4 +6,4 @@ CREATE TABLE `links_aliases` (
   `link_alias` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `link_url` (`link_url`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

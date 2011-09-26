@@ -27,17 +27,17 @@ class SSUParser{
     /*
 	 * This function identify if the current page is our main page.
 	 */
-	static protected function identifyPage($uri_parts){
-		return self::identifyName($uri_parts[0]);
-	}
+//	static protected function identifyPage($uri_parts){
+//		return self::identifyName($uri_parts[0]);
+//	}
 	
 	static protected function identifyName($string, $identifier){
 		return (strpos($string, $identifier) !== false) ? true : false; 
 	}
 	
-	static protected function identifyQuery($string, $query_key){
-		return ($query_key == $string); 
-	}
+//	static protected function identifyQuery($string, $query_key){
+//		return ($query_key == $string); 
+//	}
 	
 	static protected function getName($id, $id_field, $name_field, $table, $identifier, $cache_folder, $languages_id, $languages_code, $languages_field = "languages_id"){
 		$id = (int)$id;
