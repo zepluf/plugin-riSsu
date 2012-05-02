@@ -1,0 +1,18 @@
+<?php
+/**
+* @package Pages
+* @copyright Copyright 2003-2006 Zen Cart Development Team
+* @copyright Portions Copyright 2003 osCommerce
+* @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+* @version $Id: local.config.php.example 272 2009-11-09 17:34:36Z yellow1912 $
+*/
+	
+	$ssuLocalConfig = array(
+		'plugins'		=>	array(
+									'parsers'	=>	array('manufacturers', 'news_articles')
+								),
+		
+		'languages'		=>	array(	'fr'	=>	'default',
+									'ru'	=>	'ru',
+									)
+	);

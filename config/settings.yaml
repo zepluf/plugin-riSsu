@@ -1,0 +1,78 @@
+parsers: [ParserCategory, ParserProduct, ParserPage]
+
+status: true
+alias_status: true
+auto_alias: true
+multilang_status: false
+multilang_default_identifier: true
+extension:
+category_in_product: true
+category_separator: /
+category_maximum_level: 1
+minimum_word_length: 1
+max_name_length: 0
+delimiters:
+  id: -
+  name: -
+languages: 
+  en: custom
+  
+default:
+  parser: ParserStatic
+  extension:
+  
+pages: 
+  product_info:
+    alias:
+    extension:
+    identifier: -p-
+    parser: ParserProduct 
+  product_music_info:
+    alias:
+    extension:
+    identifier: -m-
+    parser: ParserProduct 
+  document_general_info:
+    alias:
+    extension:
+    identifier: -g-
+    parser: ParserProduct 
+  document_product_info:
+    alias:
+    extension:
+    identifier: -d-
+    parser: ParserProduct 
+  product_free_shipping_info:
+    alias:
+    extension:
+    identifier: -f-
+    parser: ParserProduct 
+  document_website_info:
+    alias:
+    extension:
+    identifier: -w-
+    parser: ParserProduct                     
+  categories:
+    alias:
+    extension:
+    identifier: -c-
+    parser: ParserCategory
+  contact_us:
+    alias: contact_us
+  page:
+    identifier: -page-
+    parser: ParserPage
+  
+paths:
+  cache: <?php echo DIR_FS_SQL_CACHE . '/ssu/' . "\n"; ?>
+  
+routes:
+  ssu:
+    pattern:  /ssu/
+    defaults: { _controller: plugins\riSsu\AdminController::indexAction }
+    
+global:    
+  backend:
+    menu:
+      extras:
+        - {text: Simple Seo Url Manager, link: ri.php/ssu/}        
