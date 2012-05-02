@@ -160,7 +160,7 @@ class Link {
                     $this->redirect($this->getPageBase().implode('&', $uri_parts));
                 }
                 else{
-                    Plugin::get('riSsu.Alias')->aliasToLink($uri_parts[0]);
+                    Plugin::get('riSsu.Alias')->aliasToLink($uri_parts[0]);var_dump($uri_parts);die();
                     $original_uri = isset($uri_parts[1]) ? $uri_parts[0].'?'.$uri_parts[1] : $uri_parts[0];
                 }
             }
@@ -182,10 +182,8 @@ class Link {
             else{
                 if(!isset($ssu_get['main_page'])){
                     foreach($this->pages as $page => $options){
-                        if(Plugin::get('riSsu.'.$options['parser'])->identifyPage($parts, $ssu_get) !== false){                            
-                            
-                            $redirect_type = 1;
-                            
+                        if(Plugin::get('riSsu.'.$options['parser'])->identifyPage($parts, $ssu_get) !== false){                                                        
+                            $redirect_type = 1;                            
                             break;
                         }
                     }

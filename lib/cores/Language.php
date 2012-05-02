@@ -42,8 +42,8 @@ class Language{
 
 		// remove anything that looks like our identifiers in the name
 			
-		foreach(Plugin::get('riPlugin.Settings')->get('riSsu.pages') as $options)
-		$name = str_replace($options['identifier'], '', $name);
+		//foreach(Plugin::get('riPlugin.Settings')->get('riSsu.pages') as $options)
+		//	$name = str_replace($options['identifier'], '', $name);
 
 		return $name;
 	}
@@ -90,8 +90,13 @@ class Language{
 	 
 	public function removeIdentifiers($name){
 		$name = Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id').$name.Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id');
-		foreach(Plugin::get('riPlugin.Settings')->get('riSsu.pages') as $options)		
-		$name = str_replace($options['identifier'], '', $name);		
+		
+		foreach(Plugin::get('riPlugin.Settings')->get('riSsu.parsers') as $parser){
+			$identifiers = Plugin::get('riSsu.' . $parser)->getIdentifiers();
+			foreach ($identifiers as $page => $identifier)
+				$name = str_replace($identifier, '', $name);				
+		}
+				
 		return trim($name, Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id'));
 	}
 }

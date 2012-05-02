@@ -17,8 +17,8 @@ class Parser{
 	    
     protected $identifiers = array();
     
-    public function addIdentifier($page, $identfier){
-        $this->identifiers[$page] = Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id') . $identfier . Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id');       
+    public function addIdentifier($page, $identifier){
+        $this->identifiers[$page] = Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id') . $identifier . Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id');       
     }
     
     /**
@@ -29,13 +29,14 @@ class Parser{
      */
     public function identifyPage(&$parts, &$_get){
         foreach($parts as $key => $part)    
-            foreach ($this->identifiers as $page => $identifier)
+            foreach ($this->identifiers as $page => $identifier){
                 if(strpos($part, $identifier) !== false){
                     $_get['main_page'] = $page;
                     $_get = array_merge($_get, $this->reverseProcessParameter($part));
                     unset($parts[$key]);
                     return true;
                 }
+            }
         return false;
     }
     
