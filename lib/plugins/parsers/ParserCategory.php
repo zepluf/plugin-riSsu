@@ -16,7 +16,6 @@ use plugins\riSsu\cores\Parser;
 class ParserCategory extends Parser{
 	protected $table            = TABLE_CATEGORIES_DESCRIPTION;
 	protected $name_field       = "categories_name";
-	protected $identifiers       = array('categories' =>	'c');
 	protected $query_key        = "cPath";
 
 	public function rebuildCpath($cPath){
@@ -31,7 +30,8 @@ class ParserCategory extends Parser{
 
 	public function getName($cPath, $identifier, $languages_id, $languages_code){
 	    
-	    if(empty($identifier)) $identifier = Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id') . current($this->identifiers) . Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id');
+	    if(empty($identifier)) $identifier = current($this->identifiers);
+	    
 		// if we have cache then we can grab it and move out
 		$cache_filename = $this->buildFileName($cPath, $languages_code);
 		if(($name = Plugin::get('riSsu.Cache')->read($cache_filename, $this->table)) !== false)

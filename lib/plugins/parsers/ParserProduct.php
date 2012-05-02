@@ -18,12 +18,6 @@ class ParserProduct extends Parser{
     protected $name_field       = "products_name";
     protected $id_field         = "products_id";
     protected $main_page        = "product_info";
-    protected $identifiers       = array('product_info'	=>	'p',
-										'product_music_info'			=>	'm',
-										'document_general_info'			=>	'g',
-										'document_product_info'			=>	'd',
-										'product_free_shipping_info'	=>	'f',
-										'document_website_info'			=>	'w');
     protected $query_key        = "products_id";
 
     public function getDynamicQueryKeys($parameters){

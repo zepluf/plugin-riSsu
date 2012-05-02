@@ -25,42 +25,42 @@ pages:
   product_info:
     alias:
     extension:
-    identifier: -p-
+    identifier: p
     parser: ParserProduct 
   product_music_info:
     alias:
     extension:
-    identifier: -m-
+    identifier: m
     parser: ParserProduct 
   document_general_info:
     alias:
     extension:
-    identifier: -g-
+    identifier: g
     parser: ParserProduct 
   document_product_info:
     alias:
     extension:
-    identifier: -d-
+    identifier: d
     parser: ParserProduct 
   product_free_shipping_info:
     alias:
     extension:
-    identifier: -f-
+    identifier: f
     parser: ParserProduct 
   document_website_info:
     alias:
     extension:
-    identifier: -w-
+    identifier: w
     parser: ParserProduct                     
   categories:
     alias:
     extension:
-    identifier: -c-
+    identifier: c
     parser: ParserCategory
   contact_us:
     alias: contact_us
   page:
-    identifier: -page-
+    identifier: page
     parser: ParserPage
   
 paths:
@@ -70,6 +70,9 @@ routes:
   ssu:
     pattern:  /ssu/
     defaults: { _controller: plugins\riSsu\AdminController::indexAction }
+  ssu_reset:
+    pattern:  /ssu/reset/
+    defaults: { _controller: plugins\riSsu\AdminController::resetAction }    
     
 global:    
   backend:

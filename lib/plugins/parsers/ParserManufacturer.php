@@ -20,7 +20,6 @@ class ParserManufacturer extends Parser{
     protected $table            = TABLE_MANUFACTURERS;
     protected $name_field       = "manufacturers_name";
     protected $id_field         = "manufacturers_id";
-    protected $identifiers       = array('manufacturers'	=>	'manufacturer');
     protected $query_key        = "manufacturers_id";
     protected $languages_field  = null;
 }

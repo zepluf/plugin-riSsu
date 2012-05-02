@@ -45,7 +45,11 @@ class Link {
             else 
                 $this->pages[$page] = $default;  
             if(!empty($options['alias']) && $options['alias'] != $page)
-                $this->aliases[$options['alias']] = $page;              
+                $this->aliases[$options['alias']] = $page;
+
+            // lets load the identifer, shall we?
+            if(isset($options['identifier']) && !empty($options['identifier']))
+                Plugin::get('riSsu.'.$this->pages[$page]['parser'])->addIdentifier($page, $options['identifier']);
         }
     }
     
@@ -178,11 +182,10 @@ class Link {
             else{
                 if(!isset($ssu_get['main_page'])){
                     foreach($this->pages as $page => $options){
-                        if(strpos($parts[0], $options['identifier']) !== false){
-                            $ssu_get['main_page'] = $page == 'categories' ? 'index' : $page;
-                            $ssu_get = array_merge($ssu_get, Plugin::get('riSsu.'.$options['parser'])->reverseProcessParameter($parts[0]));
+                        if(Plugin::get('riSsu.'.$options['parser'])->identifyPage($parts, $ssu_get) !== false){                            
+                            
                             $redirect_type = 1;
-                            unset($parts[0]);
+                            
                             break;
                         }
                     }

@@ -15,6 +15,11 @@ class AdminController extends Controller{
     }
 
     public function indexAction(Request $request){
-        return $this->render('riSsu::index.php');
+        $this->view->getHelper('php::holder')->add('main', $this->view->render('riSsu::index.php'));
+        return $this->render('riSsu::admin_layout');        
+    }
+    
+    public function resetAction(Request $request){
+        die('here');
     }
 }

@@ -15,7 +15,6 @@ class ParserNewsArticle extends Parser{
     protected $table        = TABLE_NEWS_ARTICLES_TEXT;
     protected $name_field   = "news_article_name";
     protected $id_field     = "article_id";
-    protected $identifiers   = array('news_articles'	=>	'article');
     protected $query_key    = "article_id";
     protected $languages_field = 'languages_id';
 }
