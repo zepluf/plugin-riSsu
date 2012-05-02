@@ -40,6 +40,26 @@ class Parser{
         return false;
     }
     
+    /**
+     * 
+     * Enter description here ...
+     * @param string $part
+     * @param array $_get
+     */
+    public function identifyParameter($part, &$_get){            
+        foreach ($this->identifiers as $page => $identifier){
+            if(strpos($part, $identifier) !== false){                    
+                $_get = array_merge($_get, $this->reverseProcessParameter($part));                    
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public function reverseProcessParameter($parameter){
+        return array($this->query_key => $this->getID($parameter, Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id')));
+    }
+    
     public function processPage(&$page, $alias = null){
         $page = $alias;
     }
@@ -57,10 +77,6 @@ class Parser{
     public function getStaticQueryKeys($parameters, $identifier, $languages_id, $languages_code){
         if(!isset($parameters[$this->query_key]) || empty($parameters[$this->query_key])) return array();
         return array($this->getName($parameters[$this->query_key], $identifier, $languages_id, $languages_code));
-    }
-    
-    public function reverseProcessParameter($parameter){
-        return array($this->query_key => $this->getID($parameter, Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id')));
     }
     
     public function getName($id, $identifier, $languages_id, $languages_code){

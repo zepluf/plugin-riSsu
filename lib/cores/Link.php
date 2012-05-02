@@ -160,7 +160,7 @@ class Link {
                     $this->redirect($this->getPageBase().implode('&', $uri_parts));
                 }
                 else{
-                    Plugin::get('riSsu.Alias')->aliasToLink($uri_parts[0]);var_dump($uri_parts);die();
+                    Plugin::get('riSsu.Alias')->aliasToLink($uri_parts[0]);
                     $original_uri = isset($uri_parts[1]) ? $uri_parts[0].'?'.$uri_parts[1] : $uri_parts[0];
                 }
             }
@@ -181,12 +181,12 @@ class Link {
             }
             else{
                 if(!isset($ssu_get['main_page'])){
-                    foreach($this->pages as $page => $options){
-                        if(Plugin::get('riSsu.'.$options['parser'])->identifyPage($parts, $ssu_get) !== false){                                                        
-                            $redirect_type = 1;                            
+                    foreach (Plugin::get('riPlugin.Settings')->get('riSsu.parsers') as $parser){
+                        if(Plugin::get('riSsu.'.$parser)->identifyPage($parts, $ssu_get) !== false){
+                            $redirect_type = 1;
                             break;
                         }
-                    }
+                    }                                    
                     // found nothing?
                     if(!isset($ssu_get['main_page'])){
                         $ssu_get['main_page'] = $parts[0];
@@ -207,16 +207,17 @@ class Link {
              */
             $parts = array_values($parts);
             $parts_count = count($parts);
+            
             for($counter = 0; $counter < $parts_count; $counter++){
                 $parser_encountered = false;
-                foreach($this->pages as $page => $options){
-                    if(!empty($options['identifier']) && strpos($parts[$counter], $options['identifier']) !== false){
-                        $ssu_get = array_merge($ssu_get, Plugin::get('riSsu.'.$options['parser'])->reverseProcessParameter($parts[$counter]));
+                foreach (Plugin::get('riPlugin.Settings')->get('riSsu.parsers') as $parser){
+                    if(Plugin::get('riSsu.'.$parser)->identifyParameter($parts[$counter], $ssu_get) !== false){
                         $redirect_type = 1;
-                        $parser_encountered = true;                        
+                        $parser_encountered = true; 
                         break;
                     }
                 }
+                
                 if(!$parser_encountered)
                 $ssu_get[$parts[$counter]] = isset($parts[$counter+1]) ? $parts[++$counter] : '';
             }
