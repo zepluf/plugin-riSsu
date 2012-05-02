@@ -91,9 +91,8 @@ class Language{
 	public function removeIdentifiers($name){
 		$name = Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id').$name.Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id');
 		
-		foreach(Plugin::get('riPlugin.Settings')->get('riSsu.parsers') as $parser){
-			$identifiers = Plugin::get('riSsu.' . $parser)->getIdentifiers();
-			foreach ($identifiers as $page => $identifier)
+		foreach(Plugin::get('riPlugin.Settings')->get('riSsu.parsers') as $parser){			
+			foreach (Plugin::get('riSsu.' . $parser)->getIdentifiers() as $page => $identifier)
 				$name = str_replace($identifier, '', $name);				
 		}
 				

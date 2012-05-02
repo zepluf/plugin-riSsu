@@ -17,6 +17,10 @@ class Parser{
 	    
     protected $identifiers = array();
     
+    public function getIdentifiers(){
+    	return $this->identifiers;
+    }
+    
     public function addIdentifier($page, $identifier){
         $this->identifiers[$page] = Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id') . $identifier . Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id');       
     }
@@ -74,9 +78,9 @@ class Parser{
         return $parameters;
     }
 
-    public function getStaticQueryKeys($parameters, $identifier, $languages_id, $languages_code){
+    public function getStaticQueryKeys(&$parameters, $page, $languages_id, $languages_code){
         if(!isset($parameters[$this->query_key]) || empty($parameters[$this->query_key])) return array();
-        return array($this->getName($parameters[$this->query_key], $identifier, $languages_id, $languages_code));
+        return array($this->getName($parameters[$this->query_key], $this->identifiers[$page], $languages_id, $languages_code));
     }
     
     public function getName($id, $identifier, $languages_id, $languages_code){
@@ -106,7 +110,7 @@ class Parser{
         // write to link alias
         if(Plugin::get('riPlugin.Settings')->get('riSsu.alias_status')){
             //$_name .= Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id').$id;
-            Plugin::get('riSsu.Alias')->autoAlias($id, $this->name_field, $name, $_name);
+            Plugin::get('riSsu.Alias')->autoAlias($id, $identifier, $this->name_field, $name, $_name);            
             return $_name;
         }
 

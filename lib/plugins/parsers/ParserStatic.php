@@ -13,7 +13,7 @@ use plugins\riSsu\cores\Parser;
  */
 
 class ParserStatic extends Parser{   
-    public function getStaticQueryKeys($parameters, $identifier, $languages_id, $languages_code){
+    public function getStaticQueryKeys($parameters, $page, $languages_id, $languages_code){
         return array();
     }
 }

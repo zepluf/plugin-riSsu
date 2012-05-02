@@ -93,13 +93,13 @@ class Alias{
 	}
 
 	public function linkToAlias(&$params){
-		$count = 0;
+		$_params = $params;
 		$this->retrieveAliasesOnDemand($params, 'link_url', '_links', '_links', '_aliases', 1);
-		$params = trim(str_replace($this->_links, $this->_aliases, "/$params/", $count), '/');
-		return $count;
+		$params = trim(str_replace($this->_links, $this->_aliases, "/$params/"), '/');
+		return $_params != $params;
 	}
 
-	public function autoAlias($id, $name_field, $name, &$_name){
+	public function autoAlias($id, $identifier, $name_field, $name, &$_name){
 		// if the alias happens to be the same with a define page, return.
 		if(is_dir(DIR_WS_MODULES."pages/$_name"))
 		return false;
@@ -108,40 +108,40 @@ class Alias{
 			
 		// if we are generating aliases, make sure we use the product name without the attribute string
 		// $name = current(explode(':', $name));
-		$name = zen_db_input("/$name/");
-		$_name = zen_db_input("/$_name/");
+		$slashed_name = zen_db_input("/$name/");
+		$slashed__name = zen_db_input("/$_name/");
 		$id = (int)$id;
 
 		// always update first
-		$db->Execute("UPDATE ".TABLE_LINKS_ALIASES." SET link_url = '$name' WHERE referring_id='$id' AND link_alias='$_name' AND alias_type='$name_field'");
+		$db->Execute("UPDATE ".TABLE_LINKS_ALIASES." SET link_url = '$slashed_name' WHERE referring_id='$id' AND link_alias='$slashed__name' AND alias_type='$name_field'");
 
 		// do we have any permanent link?
 		$count = $db->Execute("SELECT count(*) as count FROM ".TABLE_LINKS_ALIASES." WHERE referring_id='$id' AND alias_type='$name_field' AND permanent_link = 1 AND STATUS = 1 LIMIT 1");
 		if($count->fields['count'] > 0) return true;
 
 		// check if we already have this alias, then do nothing
-		$count = $links_aliases = $db->Execute("SELECT count(*) as count FROM ".TABLE_LINKS_ALIASES." WHERE referring_id='$id' AND alias_type='$name_field' AND link_url = '$name' AND link_alias = '$_name' LIMIT 1");
+		$count = $links_aliases = $db->Execute("SELECT count(*) as count FROM ".TABLE_LINKS_ALIASES." WHERE referring_id='$id' AND alias_type='$name_field' AND link_url = '$slashed_name' AND link_alias = '$slashed__name' LIMIT 1");
 		if($count->fields['count'] > 0) return true;
 
 		// this name is used in case of conflict
-		$temp = rtrim($_name, '/') . Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id') . $id . '/';
+		$temp = '/' . $_name . $identifier . $id . '/';
 		
 		// check if the alias with the corresponding reffering_id and type is already there
 		$links_aliases = $db->Execute("SELECT id, link_url, link_alias FROM ".TABLE_LINKS_ALIASES." WHERE referring_id='$id' AND alias_type='$name_field' AND status = '1'");
 		if($links_aliases->RecordCount() > 0){
 			while(!$links_aliases->EOF){
 				// only if we dont have this exact key pair in the database yet
-				if($links_aliases->fields['link_url'] == $name && $links_aliases->fields['link_alias'] != $_name){
+				if($links_aliases->fields['link_url'] == $slashed_name && $links_aliases->fields['link_alias'] != $slashed__name){
 				    
 				    // now, it is very possible that this was caused by the name confliction
 				    if($temp != $links_aliases->fields['link_alias']){
     					// disable the current link-alias
 	    				$db->Execute("UPDATE ".TABLE_LINKS_ALIASES." SET status = '0' WHERE id='{$links_aliases->fields['id']}'");
 		    			// add a new one in
-			    		$db->Execute("INSERT INTO ".TABLE_LINKS_ALIASES." (link_url, link_alias, alias_type, referring_id) VALUES('$name', '$_name', '$name_field', '$id')");				    	
+			    		$db->Execute("INSERT INTO ".TABLE_LINKS_ALIASES." (link_url, link_alias, alias_type, referring_id) VALUES('$slashed_name', '$slashed__name', '$name_field', '$id')");				    	
 				    }
 				    else{
-				        $_name = $temp;
+				        $_name = trim($temp, '//');
 				    }
 				    return true;
 				}
@@ -162,17 +162,18 @@ class Alias{
 		}*/
         
 		// otherwise insert the new alias
-		$links_aliases = $db->Execute("SELECT COUNT(*) AS count FROM ".TABLE_LINKS_ALIASES." WHERE link_url='$name' OR link_alias ='$_name'");
+		$links_aliases = $db->Execute("SELECT COUNT(*) AS count FROM ".TABLE_LINKS_ALIASES." WHERE link_url='$slashed_name' OR link_alias ='$slashed__name'");
 		if($links_aliases->fields['count'] == 0){
-		    $db->Execute("INSERT INTO ".TABLE_LINKS_ALIASES." (link_url, link_alias, alias_type, referring_id) VALUES('$name', '$_name', '$name_field', '$id')");
+		    $db->Execute("INSERT INTO ".TABLE_LINKS_ALIASES." (link_url, link_alias, alias_type, referring_id) VALUES('$slashed_name', '$slashed__name', '$name_field', '$id')");
 		    return true;
 		}
 		else{
 		    // try to append the id to the alias and see if that works		    
-		    $links_aliases = $db->Execute("SELECT COUNT(*) AS count FROM ".TABLE_LINKS_ALIASES." WHERE link_url='$name' OR link_alias ='$temp'");
+		    $links_aliases = $db->Execute("SELECT COUNT(*) AS count FROM ".TABLE_LINKS_ALIASES." WHERE link_url='$slashed_name' OR link_alias ='$temp'");
     		if($links_aliases->fields['count'] == 0){
-    		    $_name = $temp;
-    		    $db->Execute("INSERT INTO ".TABLE_LINKS_ALIASES." (link_url, link_alias, alias_type, referring_id) VALUES('$name', '$_name', '$name_field', '$id')");
+    		    $slashed__name = $temp;
+    		    $_name = trim($slashed__name, '//');
+    		    $db->Execute("INSERT INTO ".TABLE_LINKS_ALIASES." (link_url, link_alias, alias_type, referring_id) VALUES('$slashed_name', '$slashed__name', '$name_field', '$id')");    		    
     		    return true;
     		}
 		}

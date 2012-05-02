@@ -10,7 +10,7 @@
         <service id="riSsu.Parser" class="plugins\riSsu\cores\Parser" scope="container"></service>
         <service id="riSsu.Language" class="plugins\riSsu\cores\Language" scope="container"></service>
         
-        <service id="riSsu.ParserCategory" class="plugins\riSsu\plugins\parsers\ABCParserCategory" scope="container"></service>
+        <service id="riSsu.ParserCategory" class="plugins\riSsu\plugins\parsers\ParserCategory" scope="container"></service>
         <service id="riSsu.ParserProduct" class="plugins\riSsu\plugins\parsers\ParserProduct" scope="container"></service>
         <service id="riSsu.ParserManufacturer" class="plugins\riSsu\plugins\parsers\ParserManufacturer" scope="container"></service>
         <service id="riSsu.ParserPage" class="plugins\riSsu\plugins\parsers\ParserPage" scope="container"></service>

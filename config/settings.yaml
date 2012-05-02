@@ -1,4 +1,4 @@
-parsers: [ParserCategory, ParserProduct, ParserPage]
+parsers: [ParserProduct, ParserCategory, ParserPage]
 
 status: true
 alias_status: true

@@ -18,6 +18,14 @@ class ParserCategory extends Parser{
 	protected $name_field       = "categories_name";
 	protected $query_key        = "cPath";
 
+	public function identifyPage(&$parts, &$_get){
+		if(parent::identifyPage($parts, $_get)){
+			$_get['main_page'] = 'index';		
+			return true;
+		}
+		return false;
+	}
+	
 	public function rebuildCpath($cPath){
 		// do not trust the passed cPath, always rebuild it
 		$current_categories_id = $this->getID($cPath, '_');
@@ -77,7 +85,7 @@ class ParserCategory extends Parser{
 
 		// write to link alias
 		if(Plugin::get('riPlugin.Settings')->get('riSsu.alias_status') && Plugin::get('riPlugin.Settings')->get('riSsu.auto_alias')){
-		    if(Plugin::get('riSsu.Alias')->autoAlias($current_categories_id, $this->name_field, $name, $_name))			
+		    if(Plugin::get('riSsu.Alias')->autoAlias($current_categories_id, $identifier, $this->name_field, $name, $_name))			
 			    return $_name;
 		}
 

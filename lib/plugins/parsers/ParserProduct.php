@@ -20,14 +20,22 @@ class ParserProduct extends Parser{
     protected $main_page        = "product_info";
     protected $query_key        = "products_id";
 
+	public function identifyPage(&$parts, &$_get){
+		if(parent::identifyPage($parts, $_get)){
+			unset($parts['cPath']);		
+			return true;
+		}
+		return false;
+	}
+	
     public function getDynamicQueryKeys($parameters){
         if(empty($parameters)) return $parameters;
         unset($parameters[$this->query_key]);
-        //unset($parameters['cPath']);
+        unset($parameters['cPath']);
         return $parameters;
     }
 
-    public function getStaticQueryKeys($parameters, $identifier, $languages_id, $languages_code){
+    public function getStaticQueryKeys(&$parameters, $page, $languages_id, $languages_code){
         $result = array();
         
         if(Plugin::get('riPlugin.Settings')->get('riSsu.category_in_product')){
@@ -35,7 +43,7 @@ class ParserProduct extends Parser{
         }        
         unset($parameters['cPath']);
                 
-        $result[] = $this->getName($parameters[$this->query_key], $identifier, $languages_id, $languages_code);
+        $result[] = $this->getName($parameters[$this->query_key], $this->identifiers[$page], $languages_id, $languages_code);
         
         return $result;
     }
@@ -81,6 +89,5 @@ class ParserProduct extends Parser{
         $cPath .= $categories_id;
 
         return $cPath;
-    }
-    
+    }    
 }

@@ -34,7 +34,7 @@ class Cache {
 		return $write;
 	}
 
-	public function read($name, $cache_folder, $use_subfolder = false){
+	public function read($name, $cache_folder, $use_subfolder = false){return false;
 		if(isset($this->cache[$cache_folder][$name]))
 		return $this->cache[$cache_folder][$name];
 			
