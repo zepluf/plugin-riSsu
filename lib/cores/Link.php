@@ -53,7 +53,7 @@ class Link {
         }
     }
     
-    public function decode() {        
+    public function decode() {   
         if(!Plugin::get('riPlugin.Settings')->get('riSsu.status')) return false;
         
         global $request_type;
@@ -99,7 +99,7 @@ class Link {
                 $this->redirect($this->getPageBase());
             }
             else{             
-                if (($link = $this->link($_GET['main_page'], http_build_query($_GET), $request_type)) != false) {
+                if (($link = $this->link($_GET['main_page'], http_build_query($_GET), $request_type)) != false) {     
                     $this->redirect($link);
                 }
                 // else we should redirect to a page not found
@@ -434,7 +434,7 @@ class Link {
             
             $cache_filename = md5(Plugin::get('riSsu.'.$options['parser'])->getCacheKey($page, $parameters)).'_'.$languages_code;
 
-            if(($cache = Plugin::get('riSsu.Cache')->read($cache_filename, 'pc', true)) !== false){
+            if(($cache = Plugin::get('riCache.Cache')->read($cache_filename, 'ssu/pc', true)) !== false){
                 list($page, $params['static'], $extension) = explode("|", $cache);
                 return array('static' => $params['static'], 'dynamic' => $params['dynamic']);
             }
@@ -459,7 +459,7 @@ class Link {
         }
 
         if($set_cache){
-            Plugin::get('riSsu.Cache')->write($cache_filename, 'pc', $page.'|'.$params['static'].'|'.$extension, true);
+            Plugin::get('riCache.Cache')->write($cache_filename, 'ssu/pc', $page.'|'.$params['static'].'|'.$extension, true);
         }
 
         // here we will attempt to get the cache

@@ -73,7 +73,13 @@ routes:
   ssu_reset:
     pattern:  /ssu/reset/
     defaults: { _controller: plugins\riSsu\AdminController::resetAction }    
-    
+  ssu_alias_list:
+    pattern:  /ssu/alias/list/
+    defaults: { _controller: plugins\riSsu\AdminController::aliasListAction }  
+  ssu_alias_edit:
+    pattern:  /ssu/alias/edit/
+    defaults: { _controller: plugins\riSsu\AdminController::aliasEditAction }  
+            
 global:    
   backend:
     menu:

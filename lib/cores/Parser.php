@@ -86,7 +86,7 @@ class Parser{
     public function getName($id, $identifier, $languages_id, $languages_code){
         $id = (int)$id;
         $cache_filename = $this->buildFileName($id, $languages_code);
-        if(($name = Plugin::get('riSsu.Cache')->read($cache_filename, $this->table)) !== false)
+        if(($name = Plugin::get('riCache.Cache')->read($cache_filename, 'ssu/' . $this->table)) !== false)
             return $name;
 
         $sql_query = 'SELECT '.$this->name_field.' FROM '.$this->table.' WHERE '.$this->id_field.' = '.$id;
@@ -105,7 +105,7 @@ class Parser{
         $name = $_name.$identifier.$id;
 
         // write to file EVEN if we get an empty content
-        Plugin::get('riSsu.Cache')->write($cache_filename, $this->table, $name);
+        Plugin::get('riCache.Cache')->write($cache_filename, 'ssu/' . $this->table, $name);
 
         // write to link alias
         if(Plugin::get('riPlugin.Settings')->get('riSsu.alias_status')){

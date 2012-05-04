@@ -14,4 +14,3 @@ define('SSU_ALIAS_MANUFACTURER_TYPE', 5);
 
 // database
 define('TABLE_LINKS_ALIASES', DB_PREFIX.'ssu_aliases');
-define('TABLE_SSU_CACHE', DB_PREFIX.'ssu_cache');

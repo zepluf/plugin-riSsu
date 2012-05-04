@@ -42,7 +42,7 @@ class ParserCategory extends Parser{
 	    
 		// if we have cache then we can grab it and move out
 		$cache_filename = $this->buildFileName($cPath, $languages_code);
-		if(($name = Plugin::get('riSsu.Cache')->read($cache_filename, $this->table)) !== false)
+		if(($name = Plugin::get('riCache.Cache')->read($cache_filename, 'ssu/' . $this->table)) !== false)
 		return $name;
 
 		// rebuild cPath just to make sure
@@ -81,12 +81,13 @@ class ParserCategory extends Parser{
 		$this->processName($_name);
 		
 		// write to file EVEN if we get an empty content
-		Plugin::get('riSsu.Cache')->write($cache_filename, $this->table, $name);
+		Plugin::get('riCache.Cache')->write($cache_filename, 'ssu/' . $this->table, $name);
 
 		// write to link alias
 		if(Plugin::get('riPlugin.Settings')->get('riSsu.alias_status') && Plugin::get('riPlugin.Settings')->get('riSsu.auto_alias')){
-		    if(Plugin::get('riSsu.Alias')->autoAlias($current_categories_id, $identifier, $this->name_field, $name, $_name))			
+		    if(Plugin::get('riSsu.Alias')->autoAlias($current_categories_id, $identifier, $this->name_field, $name, $_name)){			
 			    return $_name;
+		    }
 		}
 
 		return $name;
@@ -97,20 +98,11 @@ class ParserCategory extends Parser{
 	}
 	
 	public function getParentCategoriesIds(&$categories, $categories_id) {
-	    global $db;
-	    $parent_categories_query = "select parent_id
-                                from " . TABLE_CATEGORIES . "
-                                where categories_id = '" . (int)$categories_id . "'";
-
-	    $parent_categories = $db->Execute($parent_categories_query);
-
-	    while (!$parent_categories->EOF) {
-	        if ($parent_categories->fields['parent_id'] == 0) return true;
-	        $categories[sizeof($categories)] = $parent_categories->fields['parent_id'];
-	        if ($parent_categories->fields['parent_id'] != $categories_id) {
-	            zen_get_parent_categories($categories, $parent_categories->fields['parent_id']);
-	        }
-	        $parent_categories->MoveNext();
-        }
-    }
+	    $category = Plugin::get('riCategory.Tree')->getCategory($categories_id);
+	    
+	    if($category['parent_id'] > 0){
+	        $categories[] = $category['parent_id'];
+	        $this->getParentCategoriesIds($categories, $category['parent_id']);
+	    }
+	}
 }

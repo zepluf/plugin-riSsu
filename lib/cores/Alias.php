@@ -22,30 +22,20 @@ class Alias{
 
 	private $no_search = array('link_alias'=>array(), 'link_url' => array());
 
-	// Aliases needed to be queried on demand
-	/*public function retrieveAliases(){
-		if(!(isset($_SESSION['ssu_aliases']['created_on']) && $_SESSION['ssu_aliases']['created_on'] > (int)SSU_CACHE_RESET_TIME)){
-			global $db;
-				
-			$aliases = $db->Execute('SELECT * FROM '.TABLE_LINKS_ALIASES. ' ORDER BY length(link_alias) DESC');
-			while(!$aliases->EOF){
-				$this->aliases[] = 	$aliases->fields['link_alias'];
-				$this->links[] = 	$aliases->fields['link_url'];
-
-				if($aliases->fields['status'] == 1){
-					$this->_aliases[] = 	$aliases->fields['link_alias'];
-					$this->_links[] = 	$aliases->fields['link_url'];
-				}
-				$aliases->MoveNext();
-			}
-			$_SESSION['ssu_aliases']['created_on'] = time();
-			$this->no_search = array('link_alias' => array(), 'link_url' => array());
+    public function retrieveAliases(){
+		global $db;
+		$aliases = $db->Execute('SELECT * FROM '.TABLE_LINKS_ALIASES);	
+		$result = array();
+		while(!$aliases->EOF){
+			$temp_array = array();
+			foreach($aliases->fields as $key => $value)
+				$temp_array[$key] = $value;
+			$result[] = $temp_array;
+			$aliases->MoveNext();
 		}
-		else{
-			//Plugin::get('riSsu.Cache')->read();
-		}
-	}*/
-
+		return $result;				
+	}
+	
 	// Aliases needed to be loaded on demand
 	public function retrieveAliasesOnDemand($params, $field, $compare, $from, $to, $status=null){
 		$params = explode('/',$params);
@@ -93,10 +83,16 @@ class Alias{
 	}
 
 	public function linkToAlias(&$params){
-		$_params = $params;
+		$_params = $params = trim($params, '/');
+		$count = 0;
 		$this->retrieveAliasesOnDemand($params, 'link_url', '_links', '_links', '_aliases', 1);
-		$params = trim(str_replace($this->_links, $this->_aliases, "/$params/"), '/');
-		return $_params != $params;
+		$_params = str_replace($this->_links, $this->_aliases, "/$params/", $count);
+		
+		if($count > 0 && $_params != $params){
+			$params = trim($_params, '/');
+			return true;
+		}//var_dump($params);die('aaaaa');
+		return false;
 	}
 
 	public function autoAlias($id, $identifier, $name_field, $name, &$_name){

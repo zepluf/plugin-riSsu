@@ -6,7 +6,7 @@
     <services>    	
         <service id="riSsu.Link" class="plugins\riSsu\cores\Link" scope="container"></service>                                
         <service id="riSsu.Alias" class="plugins\riSsu\cores\Alias" scope="container"></service>
-        <service id="riSsu.Cache" class="plugins\riSsu\cores\Cache" scope="container"></service>
+        
         <service id="riSsu.Parser" class="plugins\riSsu\cores\Parser" scope="container"></service>
         <service id="riSsu.Language" class="plugins\riSsu\cores\Language" scope="container"></service>
         
