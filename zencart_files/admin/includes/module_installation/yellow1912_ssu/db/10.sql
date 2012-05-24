@@ -1,1 +1,0 @@
-ALTER TABLE `links_aliases` ADD UNIQUE (`link_alias`); 

@@ -1,1 +1,0 @@
-Cache timer reset!

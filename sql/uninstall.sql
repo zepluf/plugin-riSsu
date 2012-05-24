@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS ssu_aliases;
+DROP TABLE IF EXISTS ssu_cache;
