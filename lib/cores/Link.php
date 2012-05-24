@@ -22,7 +22,10 @@
 
 namespace plugins\riSsu\cores;
 
+use Symfony\Component\Validator\Constraints\Email;
+
 use plugins\riPlugin\Plugin;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * SSU rewriter.
@@ -78,22 +81,40 @@ class Link {
 
         $regex = array('/'.str_replace('/','\/', $catalog_dir).'/');
 
-        $_request_uri = Plugin::get('riUtility.Uri')->getCurrent();
-
-        $request_uri = rawurldecode($_request_uri);
-
-        // we need to remove the extension first
-        $extension = Plugin::get('riPlugin.Settings')->get('riSsu.file_extension', '');
-        if(!empty($extension)){
-            $request_uri = str_replace($extension, '', $request_uri);
+        $request_uri = $_request_uri = Plugin::get('riUtility.Uri')->getCurrent();
+        //$request_uri = rawurldecode($_request_uri);
+        $is_dynamic_link = strpos($request_uri, 'index.php') !== false;
+        
+        // we need to remove the extension first                        
+        if(!$is_dynamic_link){
+            $file_extension = pathinfo(parse_url($request_uri, PHP_URL_PATH), PATHINFO_EXTENSION);
+            if(!empty($file_extension)) {            
+                //$defined_extension = Plugin::get('riPlugin.Settings')->get('riSsu.file_extension', '');
+                // hack for abc
+                $redirect_extension = Plugin::get('riPlugin.Settings')->get('riSsu.redirect_extension', '');
+                // if the request is redirected, it means the path is not found on server
+                // if the extension does not match what we are expected, it means this is really
+                // an invalid request and 404 status should be returned
+                if((!empty($file_extension) && $redirect_extension != $file_extension) && (empty($defined_extension) || $defined_extension != $file_extension)){
+                    $response = new Response('', 404);
+                    $response->send();
+                    exit();
+                }
+                
+                // the extension matches what we expect, lets remove it from the link anyhow. It's just
+                // for show
+                if(!empty($defined_extension)){
+                    $request_uri = str_replace($extension, '', $request_uri);
+                }
+            }
         }
-
+        
         $original_uri = trim($catalog_dir=='/' ? $request_uri : preg_replace($regex,'', $request_uri, 1), '/');
 
         $first_param = current(explode('/', $original_uri, 2));
 
         // if the index.php is in the url, lets see if we need to rebuild the path and redirect.
-        if((strpos($original_uri, 'index.php') !== false)){
+        if($is_dynamic_link){
             if(!isset($_GET['main_page']) || empty($_GET['main_page'])){  
                 // we can redirect to the shop url without the index.php
                 $this->redirect($this->getPageBase());
@@ -263,8 +284,9 @@ class Link {
         // Set POST form info / alpha testing
         if($_SERVER["REQUEST_METHOD"] == 'POST')
         $_SESSION['ssu_post'] = $_POST;
-        Header( "HTTP/1.1 301 Moved Permanently" );
-        Header( "Location: $link" );
+        
+        $response = new Response('', 301, array('Location' => $link));
+        $response->send();        
         exit();
     }
 
@@ -448,7 +470,7 @@ class Link {
             $set_cache = true;
         }
         else
-        $params['dynamic'] = http_build_query($parameters);
+            $params['dynamic'] = http_build_query($parameters);
             
         // some alias stuffs
         if(Plugin::get('riPlugin.Settings')->get('riSsu.alias_status')){

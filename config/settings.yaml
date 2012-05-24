@@ -6,6 +6,7 @@ auto_alias: true
 multilang_status: false
 multilang_default_identifier: true
 extension:
+redirect_extension: html
 category_in_product: true
 category_separator: /
 category_maximum_level: 1
