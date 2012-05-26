@@ -15,7 +15,7 @@ use plugins\riSsu\cores\Language;
  */
 // note: we can later move part of this function into sub-functions, which we can store in the base class.
 class LanguageCustom extends LanguageDefault{
-	public function parseName($name){
+	public function parse($name){
 	    // remove the stupid dots
 	    $name = str_replace(array(".", "'", "`"), '', $name);
 	    
@@ -24,6 +24,6 @@ class LanguageCustom extends LanguageDefault{
 		$matches = preg_split($pat, $name);
 		$name = $matches[0];
 	    
-		return parent::parseName($name);		
+		return parent::parse($name);		
 	}
 }

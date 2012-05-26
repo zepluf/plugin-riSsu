@@ -129,7 +129,7 @@ class Link {
         }
 		
         // if we are using multi-lang, then we should have language code at the very beginning
-        if(Plugin::get('riPlugin.Settings')->get('riSsu.multi_language_status')){
+        if(Plugin::get('riPlugin.Settings')->get('riSsu.multilang_status')){
             $languages_code = $first_param;
 
             $is_languages_code = array_key_exists($languages_code, Plugin::get('riPlugin.Settings')->get('riSsu.languages'));

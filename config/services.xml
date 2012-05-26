@@ -18,6 +18,7 @@
         <service id="riSsu.ParserStatic" class="plugins\riSsu\plugins\parsers\ParserStatic" scope="container"></service>
         
         <service id="riSsu.LanguageDefault" class="plugins\riSsu\plugins\languages\LanguageDefault" scope="container"></service>
+        <service id="riSsu.LanguageRu" class="plugins\riSsu\plugins\languages\LanguageRu" scope="container"></service>
         <service id="riSsu.LanguageCustom" class="plugins\riSsu\plugins\languages\LanguageCustom" scope="container"></service>
     </services>
 
