@@ -274,8 +274,9 @@ class Link {
         $regenerated_link = $this->link($page, $params, $request_type, true, true, false, true, false);
 
         $current_url = trim($this->getPageBase(), '/') . $_request_uri;
-        //echo $regenerated_link;echo $current_url;die();
-        if($regenerated_link != '' && ($current_url != $regenerated_link)){
+        
+        // as long as we think the regenerated url fits in the current url, we are ok 
+        if($regenerated_link != '' && strpos($current_url, $regenerated_link) != false){
             $this->redirect($regenerated_link);
         }
     }
