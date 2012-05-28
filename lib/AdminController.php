@@ -120,10 +120,10 @@ class AdminController extends Controller{
         $counter = 0;
         switch($request->get('folder')){
             case 'all':
-               $counter = Plugin::get('riCache.Cache')->remove('ssu/'); 
+               $counter = Plugin::get('riCache.Cache')->remove('', 'ssu/'); 
                break;
             default:
-               $counter = Plugin::get('riCache.Cache')->remove('ssu/' . $request->get('folder'));
+               $counter = Plugin::get('riCache.Cache')->remove('', 'ssu/' . $request->get('folder'));
                break;        
         }    
 
