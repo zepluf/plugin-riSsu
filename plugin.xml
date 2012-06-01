@@ -18,8 +18,8 @@
 	 * insert below:
 	 <![CDATA[
 	 <pre class="code" data-language="php">
-	 if(Plugin::get('riSsu.Link') !== false)     
-       if(($link = Plugin::get('riSsu.Link')->link($page, $parameters, $connection, $add_session_id, $search_engine_safe, $static, $use_dir_ws_catalog)) !== false)
+	 if(plugins\RiPlugin\Plugin::get('riSsu.Link') !== false)     
+       if(($link = plugins\RiPlugin\Plugin::get('riSsu.Link')->link($page, $parameters, $connection, $add_session_id, $search_engine_safe, $static, $use_dir_ws_catalog)) !== false)
          return $link;
      </pre>
      ]]>
