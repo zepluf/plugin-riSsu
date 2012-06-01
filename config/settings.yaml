@@ -3,7 +3,7 @@ parsers: [ParserProduct, ParserCategory, ParserPage]
 status: true
 alias_status: true
 auto_alias: true
-multilang_status: true
+multilang_status: false
 multilang_default_identifier: true
 extension:
 redirect_extension: html
@@ -16,7 +16,7 @@ delimiters:
   id: -
   name: -
 languages: 
-  en: ru
+  en: default
   ru: ru
 default:
   parser: ParserStatic

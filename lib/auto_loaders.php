@@ -19,5 +19,5 @@ if(!IS_ADMIN_FLAG){
             break;
         }
     }
-    $autoLoadConfig[80][] = array('autoType'=>'include', 'loadFile'=> DIR_FS_CATALOG . 'plugins/riSsu/lib/decode.php');
+    $autoLoadConfig[80][] = array('autoType'=>'include', 'loadFile'=> __DIR__ . '/decode.php');
 }

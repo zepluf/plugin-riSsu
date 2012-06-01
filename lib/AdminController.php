@@ -15,7 +15,7 @@ class AdminController extends Controller{
     }
 
     public function indexAction(Request $request){
-        $this->view->getHelper('php::holder')->add('main', $this->view->render('riSsu::index.php'));
+        $this->container->get('templating.holder')->add('main', $this->view->render('riSsu::index.php'));
         return $this->render('riSsu::admin_layout');
     }
 
@@ -127,7 +127,7 @@ class AdminController extends Controller{
                break;        
         }    
 
-        $this->view->getHelper('php::holder')->add('main', ri('%counter% files removed', array('%counter%' => $counter)))
+        $this->container->get('templating.holder')->add('main', ri('%counter% files removed', array('%counter%' => $counter)))
         ->add('main', $this->view->render('riSsu::index.php'));
         return $this->render('riSsu::admin_layout');
     }
