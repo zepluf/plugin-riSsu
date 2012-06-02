@@ -51,7 +51,7 @@ class ParserCategory extends Parser{
 		$category_ids = explode('_', $cPath);
 		$cat_count = count($category_ids);
 
-		$counter = $cat_count - (int)Plugin::get('riPlugin.Settings')->get('riSsu.category_maximum_level');
+		$counter = $cat_count - (int)Plugin::get('settings')->get('riSsu.category_maximum_level');
 
 		if($counter < 0) $counter = 0;
 
@@ -73,18 +73,18 @@ class ParserCategory extends Parser{
 
 		if(empty($_name)) $_name = Plugin::get('riSsu.Language')->parseName($name_field, $languages_code);
 
-		$name = implode(Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name'), $_name).$identifier.$cPath;
+		$name = implode(Plugin::get('settings')->get('riSsu.delimiters.name'), $_name).$identifier.$cPath;
 
-		$_name = implode(Plugin::get('riPlugin.Settings')->get('riSsu.category_separator'), $_name);
+		$_name = implode(Plugin::get('settings')->get('riSsu.category_separator'), $_name);
 		
         //$this->processName($name);
 		$this->processName($_name);
 		
 		// write to file EVEN if we get an empty content
-		Plugin::get('riCache.Cache')->write($cache_filename, 'ssu/' . $this->table, $name);
+		Plugin::get('riCache.Cache')->write(Plugin::get('settings')->get('riSsu.cache_path') . $this->table . '/' . $cache_filename, $name);
 
 		// write to link alias
-		if(Plugin::get('riPlugin.Settings')->get('riSsu.alias_status') && Plugin::get('riPlugin.Settings')->get('riSsu.auto_alias')){
+		if(Plugin::get('settings')->get('riSsu.alias_status') && Plugin::get('settings')->get('riSsu.auto_alias')){
 		    if(Plugin::get('riSsu.Alias')->autoAlias($current_categories_id, $identifier, $this->name_field, $name, $_name)){			
 			    return $_name;
 		    }

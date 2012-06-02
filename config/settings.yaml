@@ -1,3 +1,5 @@
+cache_path: <?php echo DIR_FS_SQL_CACHE . '/ssu/'; ?>
+
 parsers: [ParserProduct, ParserCategory, ParserPage]
 
 status: true
@@ -64,9 +66,7 @@ pages:
     identifier: page
     parser: ParserPage
   
-paths:
-  cache: <?php echo DIR_FS_SQL_CACHE . '/ssu/' . "\n"; ?>
-  
+# do not edit below this area  
 routes:
   ssu:
     pattern:  /ssu/

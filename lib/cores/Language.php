@@ -32,28 +32,28 @@ class Language{
 		$name = mb_strtolower($name);
 
 		// we replace any non alpha numeric characters by the name delimiter
-		$name = $this->removeNonAlphaNumeric($name, Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name'));
+		$name = $this->removeNonAlphaNumeric($name, Plugin::get('settings')->get('riSsu.delimiters.name'));
 			
 		// Remove short words first
-		$name = $this->removeShortWords($name, Plugin::get('riPlugin.Settings')->get('riSsu.minimum_word_length'), Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name'));
+		$name = $this->removeShortWords($name, Plugin::get('settings')->get('riSsu.minimum_word_length'), Plugin::get('settings')->get('riSsu.delimiters.name'));
 			
 		// trim the sentence
 		$name = $this->trimLongName($name);
 			
-		// remove excess Plugin::get('riPlugin.Settings')->get('riSsu.delimiters', 'name')
+		// remove excess Plugin::get('settings')->get('riSsu.delimiters', 'name')
 		$name = $this->removeDelimiter($name);
 			
 		// remove identifiers
 		$name = $this->removeIdentifiers($name);
 			
 		// remove trailing _
-		$name = trim($name, Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name'));
+		$name = trim($name, Plugin::get('settings')->get('riSsu.delimiters.name'));
 
 		return urlencode($name);
 	}
 
 	public function loadLanguageParser($languages_code){
-		$languages = Plugin::get('riPlugin.Settings')->get('riSsu.languages');
+		$languages = Plugin::get('settings')->get('riSsu.languages');
 		if(array_key_exists($languages_code, $languages))
 		$languages_parser = $languages[$languages_code];
 		else
@@ -66,14 +66,14 @@ class Language{
 
 	public function removeDelimiter($name){
 		// remove excess $this->registry('name_delimiter')
-		// $name = preg_replace('/'.Plugin::get('riPlugin.Settings')->get('riSsu.delimiters', 'name').Plugin::get('riPlugin.Settings')->get('riSsu.delimiters', 'name').'+/', Plugin::get('riPlugin.Settings')->get('riSsu.delimiters', 'name'), $name);
-		$name_delimiter = Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name');
+		// $name = preg_replace('/'.Plugin::get('settings')->get('riSsu.delimiters', 'name').Plugin::get('settings')->get('riSsu.delimiters', 'name').'+/', Plugin::get('settings')->get('riSsu.delimiters', 'name'), $name);
+		$name_delimiter = Plugin::get('settings')->get('riSsu.delimiters.name');
 		while(strpos($name, $name_delimiter.$name_delimiter) !== false)
 		$name = str_replace($name_delimiter.$name_delimiter, $name_delimiter, $name);
 
 		// remove anything that looks like our identifiers in the name
 			
-		//foreach(Plugin::get('riPlugin.Settings')->get('riSsu.pages') as $options)
+		//foreach(Plugin::get('settings')->get('riSsu.pages') as $options)
 		//	$name = str_replace($options['identifier'], '', $name);
 
 		return $name;
@@ -90,8 +90,8 @@ class Language{
 	}
 
 	function trimLongName($name){
-		if (Plugin::get('riPlugin.Settings')->get('riSsu.max_name_length') > 0 && (mb_strlen($name) > Plugin::get('riPlugin.Settings')->get('riSsu.max_name_length'))){
-			preg_match('/(.{' . Plugin::get('riPlugin.Settings')->get('riSsu.max_name_length') . '}.*?)\b/', $name, $matches);
+		if (Plugin::get('settings')->get('riSsu.max_name_length') > 0 && (mb_strlen($name) > Plugin::get('settings')->get('riSsu.max_name_length'))){
+			preg_match('/(.{' . Plugin::get('settings')->get('riSsu.max_name_length') . '}.*?)\b/', $name, $matches);
 			$name = rtrim($matches[1]);
 		}
 		return $name;
@@ -120,13 +120,13 @@ class Language{
 	}
 	 
 	public function removeIdentifiers($name){
-		$name = Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id').$name.Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id');
+		$name = Plugin::get('settings')->get('riSsu.delimiters.id').$name.Plugin::get('settings')->get('riSsu.delimiters.id');
 		
-		foreach(Plugin::get('riPlugin.Settings')->get('riSsu.parsers') as $parser){			
+		foreach(Plugin::get('settings')->get('riSsu.parsers') as $parser){			
 			foreach (Plugin::get('riSsu.' . $parser)->getIdentifiers() as $page => $identifier)
 				$name = str_replace($identifier, '', $name);				
 		}
 				
-		return trim($name, Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id'));
+		return trim($name, Plugin::get('settings')->get('riSsu.delimiters.id'));
 	}
 }

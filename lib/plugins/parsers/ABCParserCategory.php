@@ -17,15 +17,15 @@ class ABCParserCategory extends ParserCategory{
 
     protected function processName(&$name){             
         // remove from after br
-        if(($pos = strpos($name, Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name') . 'br' . Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name'))) !== false)
+        if(($pos = strpos($name, Plugin::get('settings')->get('riSsu.delimiters.name') . 'br' . Plugin::get('settings')->get('riSsu.delimiters.name'))) !== false)
             $name = substr($name, 0, $pos);
             
         // remove from after off
-        if(($pos = strpos($name, Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name') . 'off' . Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name'))) !== false)
+        if(($pos = strpos($name, Plugin::get('settings')->get('riSsu.delimiters.name') . 'off' . Plugin::get('settings')->get('riSsu.delimiters.name'))) !== false)
             $name = substr($name, 0, $pos);
             
         // put in giftcard
-        $name .= Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.name') . 'gift-cards';
+        $name .= Plugin::get('settings')->get('riSsu.delimiters.name') . 'gift-cards';
     }
 
 }

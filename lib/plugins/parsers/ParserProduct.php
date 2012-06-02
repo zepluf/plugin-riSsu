@@ -38,7 +38,7 @@ class ParserProduct extends Parser{
     public function getStaticQueryKeys(&$parameters, $page, $languages_id, $languages_code){
         $result = array();
         
-        if(Plugin::get('riPlugin.Settings')->get('riSsu.category_in_product')){
+        if(Plugin::get('settings')->get('riSsu.category_in_product')){
             $result[] = Plugin::get('riSsu.ParserCategory')->getName($this->getProductPath($parameters[$this->query_key], $parameters['cPath']), null, $languages_id, $languages_code);            
         }        
         unset($parameters['cPath']);

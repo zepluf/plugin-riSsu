@@ -39,8 +39,8 @@ class Link {
     
   
     public function __construct(){
-        $this->pages = Plugin::get('riPlugin.Settings')->get('riSsu.pages');   
-        $default = Plugin::get('riPlugin.Settings')->get('riSsu.default');
+        $this->pages = Plugin::get('settings')->get('riSsu.pages');   
+        $default = Plugin::get('settings')->get('riSsu.default');
 
         foreach($this->pages as $page => $options){
             if(is_array($this->pages[$page]))
@@ -57,7 +57,7 @@ class Link {
     }
     
     public function decode() {   
-        if(!Plugin::get('riPlugin.Settings')->get('riSsu.status')) return false;
+        if(!Plugin::get('settings')->get('riSsu.status')) return false;
         
         global $request_type;
         // do not do anything inside admin
@@ -73,7 +73,7 @@ class Link {
             if($_GET['main_page'] == 'index' && isset($_GET['cPath']))
                 $page = 'categories';
                 
-            if (!array_key_exists($page, Plugin::get('riPlugin.Settings')->get('riSsu.pages'))) return false;
+            if (!array_key_exists($page, Plugin::get('settings')->get('riSsu.pages'))) return false;
         }
         
         // remove the catalog dir from the link
@@ -89,9 +89,9 @@ class Link {
         if(!$is_dynamic_link){
             $file_extension = pathinfo(parse_url($request_uri, PHP_URL_PATH), PATHINFO_EXTENSION);
             if(!empty($file_extension)) {            
-                //$defined_extension = Plugin::get('riPlugin.Settings')->get('riSsu.file_extension', '');
+                //$defined_extension = Plugin::get('settings')->get('riSsu.file_extension', '');
                 // hack for abc
-                $redirect_extension = Plugin::get('riPlugin.Settings')->get('riSsu.redirect_extension', '');
+                $redirect_extension = Plugin::get('settings')->get('riSsu.redirect_extension', '');
                 // if the request is redirected, it means the path is not found on server
                 // if the extension does not match what we are expected, it means this is really
                 // an invalid request and 404 status should be returned
@@ -129,13 +129,13 @@ class Link {
         }
 		
         // if we are using multi-lang, then we should have language code at the very beginning
-        if(Plugin::get('riPlugin.Settings')->get('riSsu.multilang_status')){
+        if(Plugin::get('settings')->get('riSsu.multilang_status')){
             $languages_code = $first_param;
 
-            $is_languages_code = array_key_exists($languages_code, Plugin::get('riPlugin.Settings')->get('riSsu.languages'));
+            $is_languages_code = array_key_exists($languages_code, Plugin::get('settings')->get('riSsu.languages'));
 
             // if this is the default language, we may need redirection here
-            if(Plugin::get('riPlugin.Settings')->get('riSsu.default_language_status')){
+            if(Plugin::get('settings')->get('riSsu.default_language_status')){
                 if($languages_code == DEFAULT_LANGUAGE)
                 $redirect_type = 1;
                 elseif(!$is_languages_code)
@@ -174,7 +174,7 @@ class Link {
             }
 
             // if we are using link alias, lets attempt to get the parsed content from cache
-            if(Plugin::get('riPlugin.Settings')->get('riSsu.alias_status')){
+            if(Plugin::get('settings')->get('riSsu.alias_status')){
                 $uri_parts = explode('?', $original_uri);
                 if(Plugin::get('riSsu.Alias')->linkToAlias($uri_parts[0])){
                     $this->redirect($this->getPageBase().implode('&', $uri_parts));
@@ -201,7 +201,7 @@ class Link {
             }
             else{
                 if(!isset($ssu_get['main_page'])){
-                    foreach (Plugin::get('riPlugin.Settings')->get('riSsu.parsers') as $parser){
+                    foreach (Plugin::get('settings')->get('riSsu.parsers') as $parser){
                         if(Plugin::get('riSsu.'.$parser)->identifyPage($parts, $ssu_get) !== false){
                             $redirect_type = 1;
                             break;
@@ -230,7 +230,7 @@ class Link {
             
             for($counter = 0; $counter < $parts_count; $counter++){
                 $parser_encountered = false;
-                foreach (Plugin::get('riPlugin.Settings')->get('riSsu.parsers') as $parser){
+                foreach (Plugin::get('settings')->get('riSsu.parsers') as $parser){
                     if(Plugin::get('riSsu.'.$parser)->identifyParameter($parts[$counter], $ssu_get) !== false){
                         $redirect_type = 1;
                         $parser_encountered = true; 
@@ -262,7 +262,7 @@ class Link {
         $page = '';
 
         if(isset($_get['main_page'])) {$page = $_get['main_page']; unset($_get['main_page']);}
-        if(Plugin::get('riPlugin.Settings')->get('riSsu.multilang_status') && $_SESSION['languages_code'] == $_get['language']) {unset($_get['language']);}
+        if(Plugin::get('settings')->get('riSsu.multilang_status') && $_SESSION['languages_code'] == $_get['language']) {unset($_get['language']);}
 
         // no need to include session id
         $session_name = zen_session_name();
@@ -326,7 +326,7 @@ class Link {
      */
     public function link($page = '', $parameters = '', $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true, $static = false, $use_dir_ws_catalog = true, $browser_safe = true){
         
-        if(!Plugin::get('riPlugin.Settings')->get('riSsu.status')) return false;
+        if(!Plugin::get('settings')->get('riSsu.status')) return false;
         
         global $request_type, $session_started, $http_domain, $https_domain;
         
@@ -367,7 +367,7 @@ class Link {
                 
             $this->current_page = $page;
             // if this page is our exclude list, let zen handle the job
-            if (!array_key_exists($page, Plugin::get('riPlugin.Settings')->get('riSsu.pages'))) return false;
+            if (!array_key_exists($page, Plugin::get('settings')->get('riSsu.pages'))) return false;
 
             $parameters = $this->parseParams($languages_code, $page, $parameters, $extension);
         }
@@ -391,13 +391,13 @@ class Link {
 
         $link = trim($link, '/');
 
-        $languages_code = Plugin::get('riPlugin.Settings')->get('riSsu.multilang_status') ? $languages_code : '';
+        $languages_code = Plugin::get('settings')->get('riSsu.multilang_status') ? $languages_code : '';
 
         // append language code if:
         // multi lang is on AND we use default lang id OR We dont use default lang id but the current lang is not default
-        if(Plugin::get('riPlugin.Settings')->get('riSsu.multilang_status') &&
-        (!Plugin::get('riPlugin.Settings')->get('riSsu.multilang_default_identifier') ||
-        (Plugin::get('riPlugin.Settings')->get('riSsu.multilang_default_identifier') && $languages_code != DEFAULT_LANGUAGE)))
+        if(Plugin::get('settings')->get('riSsu.multilang_status') &&
+        (!Plugin::get('settings')->get('riSsu.multilang_default_identifier') ||
+        (Plugin::get('settings')->get('riSsu.multilang_default_identifier') && $languages_code != DEFAULT_LANGUAGE)))
         $link .= "/$languages_code";
 
         if(!empty($page))
@@ -436,7 +436,7 @@ class Link {
         $params = $excluded_queries = array();
         $languages_id = isset($_SESSION['languages_id']) ? (int)$_SESSION['languages_id'] : 1;
         $_get = array('main_page' => $page);
-        $extension = Plugin::get('riPlugin.Settings')->get('riSsu.file_extension');
+        $extension = Plugin::get('settings')->get('riSsu.file_extension');
 
         // parse into an array
         parse_str($parameters, $parameters);
@@ -444,13 +444,13 @@ class Link {
         // parse language
         if(isset($parameters['language']) && !empty($parameters['language']) && ($languages_id = $this->getLanguagesID($parameters['language'])) !== false){
             $languages_code = $parameters['language'];
-            if(Plugin::get('riPlugin.Settings')->get('riSsu.multilang_status')){
+            if(Plugin::get('settings')->get('riSsu.multilang_status')){
                 unset($parameters['language']);
             }
         }
 
         // do we find this page in the parser mapping?
-        if(($mapped_page = Plugin::get('riPlugin.Settings')->get('riSsu.pages.' . $page)) != null){
+        if(($mapped_page = Plugin::get('settings')->get('riSsu.pages.' . $page)) != null){
             $options = $this->pages[$page];
                         
             $params['dynamic'] = http_build_query(Plugin::get('riSsu.'.$options['parser'])->getDynamicQueryKeys($parameters));
@@ -466,7 +466,7 @@ class Link {
 
             Plugin::get('riSsu.'.$options['parser'])->processPage($page, $mapped_page['alias']);
                                     
-            $extension = isset($mapped_page['extension']) ? $mapped_page['extension'] : Plugin::get('riPlugin.Settings')->get('riSsu.file_extension');
+            $extension = isset($mapped_page['extension']) ? $mapped_page['extension'] : Plugin::get('settings')->get('riSsu.file_extension');
 
             $set_cache = true;
         }
@@ -474,7 +474,7 @@ class Link {
             $params['dynamic'] = http_build_query($parameters);
             
         // some alias stuffs
-        if(Plugin::get('riPlugin.Settings')->get('riSsu.alias_status')){
+        if(Plugin::get('settings')->get('riSsu.alias_status')){
             if(!empty($params['static']))
             Plugin::get('riSsu.Alias')->linkToAlias($params['static']);
             if(!empty($page))
@@ -482,7 +482,7 @@ class Link {
         }
 
         if($set_cache){
-            Plugin::get('riCache.Cache')->write($cache_filename, 'ssu/pc', $page.'|'.$params['static'].'|'.$extension, true);
+            Plugin::get('riCache.Cache')->write(Plugin::get('settings')->get('riSsu.cache_path') . 'pc/' . $cache_filename, $page.'|'.$params['static'].'|'.$extension, true);
         }
 
         // here we will attempt to get the cache

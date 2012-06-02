@@ -22,7 +22,7 @@ class Parser{
     }
     
     public function addIdentifier($page, $identifier){
-        $this->identifiers[$page] = Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id') . $identifier . Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id');       
+        $this->identifiers[$page] = Plugin::get('settings')->get('riSsu.delimiters.id') . $identifier . Plugin::get('settings')->get('riSsu.delimiters.id');       
     }
     
     /**
@@ -61,7 +61,7 @@ class Parser{
     }
     
     public function reverseProcessParameter($parameter){
-        return array($this->query_key => $this->getID($parameter, Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id')));
+        return array($this->query_key => $this->getID($parameter, Plugin::get('settings')->get('riSsu.delimiters.id')));
     }
     
     public function processPage(&$page, $alias = null){
@@ -105,11 +105,11 @@ class Parser{
         $name = $_name.$identifier.$id;
 
         // write to file EVEN if we get an empty content
-        Plugin::get('riCache.Cache')->write($cache_filename, 'ssu/' . $this->table, $name);
+        Plugin::get('riCache.Cache')->write(Plugin::get('settings')->get('riSsu.cache_path') . $this->table . '/' . $cache_filename, $name);
 
         // write to link alias
-        if(Plugin::get('riPlugin.Settings')->get('riSsu.alias_status')){
-            //$_name .= Plugin::get('riPlugin.Settings')->get('riSsu.delimiters.id').$id;
+        if(Plugin::get('settings')->get('riSsu.alias_status')){
+            //$_name .= Plugin::get('settings')->get('riSsu.delimiters.id').$id;
             Plugin::get('riSsu.Alias')->autoAlias($id, $identifier, $this->name_field, $name, $_name);            
             return $_name;
         }
