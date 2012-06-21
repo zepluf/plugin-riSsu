@@ -4,7 +4,7 @@ namespace plugins\riSsu;
 use plugins\riCore\PluginCore;
 use plugins\riPlugin\Plugin;
 
-class riSsu extends PluginCore{
+class RiSsu extends PluginCore{
     
     public function install(){
         return Plugin::get('riCore.DatabasePatch')->executeSqlFile(file(__DIR__ . '/sql/install.sql'));

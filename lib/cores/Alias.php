@@ -91,7 +91,7 @@ class Alias{
 		if($count > 0 && $_params != $params){
 			$params = trim($_params, '/');
 			return true;
-		}//var_dump($params);die('aaaaa');
+		}
 		return false;
 	}
 

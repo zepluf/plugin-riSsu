@@ -13,7 +13,12 @@ use plugins\riPlugin\Plugin;
 */
 class Parser{
 	
-    protected $languages_field = 'language_id';
+    protected
+        $languages_field = 'language_id',
+        $table = '',
+        $id_field = '',
+        $name_field = '',
+        $query_key;
 	    
     protected $identifiers = array();
     
@@ -99,7 +104,7 @@ class Parser{
             $_name = $this->getNameFromDB($sql_query, $this->name_field);
         }
 
-        if(empty($_name)) $_name = $name_field;
+        if(empty($_name)) $_name = $this->name_field;
         $_name = Plugin::get('riSsu.Language')->parseName($_name, $languages_code);
 
         $name = $_name.$identifier.$id;
@@ -111,7 +116,7 @@ class Parser{
         if(Plugin::get('settings')->get('riSsu.alias_status')){
             //$_name .= Plugin::get('settings')->get('riSsu.delimiters.id').$id;
             Plugin::get('riSsu.Alias')->autoAlias($id, $identifier, $this->name_field, $name, $_name);            
-            return $_name;
+            //return $_name;
         }
 
         return $name;

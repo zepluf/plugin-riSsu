@@ -104,7 +104,7 @@ class Link {
                 // the extension matches what we expect, lets remove it from the link anyhow. It's just
                 // for show
                 if(!empty($defined_extension)){
-                    $request_uri = str_replace($extension, '', $request_uri);
+                    $request_uri = str_replace($file_extension, '', $request_uri);
                 }
             }
         }
@@ -294,7 +294,7 @@ class Link {
     /**
      * Enter description here...
      *
-     * @param unknown_type $_get
+     * @param string $_get
      */
     private function rebuildENV($ssu_get, $catalog_dir){
         $_GET = array_merge($_GET, $ssu_get);
@@ -505,10 +505,5 @@ class Link {
 
         }
         return $_SESSION['ssu_languages_code'][$languages_code];
-    }
-
-    function rel(){
-        if (defined('ROBOTS_PAGES_TO_SKIP') && in_array($this->current_page, explode(",", constant('ROBOTS_PAGES_TO_SKIP')))
-        || $current_page_base=='down_for_maintenance') return "'nofollow'";
     }
 }
