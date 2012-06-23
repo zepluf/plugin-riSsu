@@ -26,7 +26,7 @@
  	</notes>
 	<authors>
 		<author>
-			<name>Raine Ng</name>
+			<name>RubikIntegration team</name>
 			<email>support@rubikintegration.com</email>
 		</author>
 	</authors>
@@ -43,7 +43,11 @@
    			<plugin>  			
   				<codename>riCache</codename>
 				<min>1.0</min>			
-			</plugin>   				   			
+			</plugin>   		
+			<plugin>  			
+  				<codename>riCategory</codename>
+				<min>1.0</min>			
+			</plugin>
    		</plugins>
 	</dependencies>
 	<changelog>
