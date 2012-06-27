@@ -6,7 +6,6 @@ auto_alias: true
 multilang_status: false
 multilang_default_identifier: true
 extension:
-redirect_extension: html
 category_in_product: true
 category_separator: /
 category_maximum_level: 1
@@ -21,7 +20,10 @@ languages:
 default:
   parser: ParserStatic
   extension:
-  
+# blocking the spiders?
+session_block_spiders: true
+# a very special setting, please do not edit if you do not understand it
+redirect_extension: html
 pages: 
   product_info:
     alias:
