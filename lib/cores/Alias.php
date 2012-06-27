@@ -107,13 +107,12 @@ class Alias{
 		$slashed_name = zen_db_input("/$name/");
 		$slashed__name = zen_db_input("/$_name/");
 		$id = (int)$id;
+        // do we have any permanent link?
+        $count = $db->Execute("SELECT count(*) as count FROM ".TABLE_LINKS_ALIASES." WHERE referring_id='$id' AND alias_type='$name_field' AND permanent_link = 1 AND STATUS = 1 LIMIT 1");
+        if($count->fields['count'] > 0) return true;
 
 		// always update first
 		$db->Execute("UPDATE ".TABLE_LINKS_ALIASES." SET link_url = '$slashed_name' WHERE referring_id='$id' AND link_alias='$slashed__name' AND alias_type='$name_field'");
-
-		// do we have any permanent link?
-		$count = $db->Execute("SELECT count(*) as count FROM ".TABLE_LINKS_ALIASES." WHERE referring_id='$id' AND alias_type='$name_field' AND permanent_link = 1 AND STATUS = 1 LIMIT 1");
-		if($count->fields['count'] > 0) return true;
 
 		// check if we already have this alias, then do nothing
 		$count = $links_aliases = $db->Execute("SELECT count(*) as count FROM ".TABLE_LINKS_ALIASES." WHERE referring_id='$id' AND alias_type='$name_field' AND link_url = '$slashed_name' AND link_alias = '$slashed__name' LIMIT 1");
@@ -145,18 +144,6 @@ class Alias{
 			}
 		}
 
-		/*
-		// check if we already have this link url, then we update referring id and type
-		$links_aliases = $db->Execute("SELECT COUNT(*) as count FROM ".TABLE_LINKS_ALIASES." WHERE link_url = '$name' 
-						AND referring_id <> $id AND alias_type = '$name_field'");
-		if($links_aliases->fields['count']> 0){
-		    echo $name;die('heree');
-			// update the referring_id and alias_type
-			//if($links_aliases->fields['referring_id'] != $id && $links_aliases->fields['alias_type'] == $name_field)
-			//$db->Execute("UPDATE ".TABLE_LINKS_ALIASES." SET referring_id='$id' AND alias_type='$name_field' WHERE id = '{$links_aliases->fields['id']}'");
-			return;
-		}*/
-        
 		// otherwise insert the new alias
 		$links_aliases = $db->Execute("SELECT COUNT(*) AS count FROM ".TABLE_LINKS_ALIASES." WHERE link_url='$slashed_name' OR link_alias ='$slashed__name'");
 		if($links_aliases->fields['count'] == 0){

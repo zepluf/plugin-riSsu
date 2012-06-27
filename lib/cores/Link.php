@@ -17,9 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-?>
-<?php
-
 namespace plugins\riSsu\cores;
 
 use Symfony\Component\Validator\Constraints\Email;
@@ -457,7 +454,7 @@ class Link {
             
             $cache_filename = md5(Plugin::get('riSsu.'.$options['parser'])->getCacheKey($page, $parameters)).'_'.$languages_code;
 
-            if(($cache = Plugin::get('riCache.Cache')->read($cache_filename, 'ssu/pc', true)) !== false){
+            if(($cache = Plugin::get('riCache.Cache')->read('ssu/pc/' . $cache_filename, true)) !== false){
                 list($page, $params['static'], $extension) = explode("|", $cache);
                 return array('static' => $params['static'], 'dynamic' => $params['dynamic']);
             }
@@ -482,7 +479,7 @@ class Link {
         }
 
         if($set_cache){
-            Plugin::get('riCache.Cache')->write(Plugin::get('settings')->get('riSsu.cache_path') . 'pc/' . $cache_filename, $page.'|'.$params['static'].'|'.$extension, true);
+            Plugin::get('riCache.Cache')->write('ssu/pc/' . $cache_filename, $page.'|'.$params['static'].'|'.$extension, true);
         }
 
         // here we will attempt to get the cache

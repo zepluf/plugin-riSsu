@@ -1,5 +1,3 @@
-cache_path: <?php echo DIR_FS_SQL_CACHE . '/ssu/'; ?>
-
 parsers: [ParserProduct, ParserCategory, ParserPage]
 
 status: true

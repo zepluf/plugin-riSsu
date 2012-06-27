@@ -38,11 +38,11 @@ class ParserCategory extends Parser{
 
     public function getName($cPath, $identifier, $languages_id, $languages_code){
 
-        if(empty($identifier)) $identifier = current($this->identifiers);
+        if(empty($identifier)) $identifier = $this->identifiers['categories'];
 
         // if we have cache then we can grab it and move out
         $cache_filename = $this->buildFileName($cPath, $languages_code);
-        if(($name = Plugin::get('riCache.Cache')->read($cache_filename, 'ssu/' . $this->table)) !== false)
+        if(($name = Plugin::get('riCache.Cache')->read('ssu/' . $this->table . '/' . $cache_filename)) !== false)
             return $name;
 
         // rebuild cPath just to make sure
@@ -71,7 +71,7 @@ class ParserCategory extends Parser{
             $counter++;
         }
 
-        if(empty($_name)) $_name = Plugin::get('riSsu.Language')->parseName($name_field, $languages_code);
+        if(empty($_name)) $_name = Plugin::get('riSsu.Language')->parseName($this->name_field, $languages_code);
 
         $name = implode(Plugin::get('settings')->get('riSsu.delimiters.name'), $_name).$identifier.$cPath;
 
@@ -81,7 +81,7 @@ class ParserCategory extends Parser{
         $this->processName($_name);
 
         // write to file EVEN if we get an empty content
-        Plugin::get('riCache.Cache')->write(Plugin::get('settings')->get('riSsu.cache_path') . $this->table . '/' . $cache_filename, $name);
+        Plugin::get('riCache.Cache')->write('ssu/' . $this->table . '/' . $cache_filename, $name);
 
         // write to link alias
         if(Plugin::get('settings')->get('riSsu.alias_status') && Plugin::get('settings')->get('riSsu.auto_alias')){
