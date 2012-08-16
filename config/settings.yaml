@@ -1,30 +1,56 @@
-parsers: [ParserProduct, ParserCategory, ParserPage]
+# this file should not be edited. Please create local.yaml in this same folder if you want to over-ride any current settings
 
+# should we turn on ssu?
 status: true
+# should we turn on alias?
 alias_status: true
+# should the aliases be automatically generated to give links like categories-name/products-name
 auto_alias: true
+# are we using multi language?
 multilang_status: false
+# do we want to include the language identifier for the default language?
+# i.e Your site, even if using English as default, will always have links like this yoursite.com/en/....
 multilang_default_identifier: true
+# do we want to append extension, for example .html, to the end of the links?
 extension:
+# trailing slash?
+trailing_slash: true
+# do we want to include the category name in the product link?
 category_in_product: true
+# how do we want to separate categories in the links?
 category_separator: /
-category_maximum_level: 1
+# how many categories we want to include in a link?
+# For example your site may have 4 category levels but you want to display max 3 only, to shorten your links
+category_maximum_level: 2
+# what is the minimum length of a word. If you set to 2 for example, then "this-is-a-name" will become "this-is-name"
 minimum_word_length: 1
+# do you want to cut off the name on the links if it is too long? 0 means unlimited
 max_name_length: 0
+# this is a sample product name: "lenovo x200" which has the product id of 199
+# after transforming, without auto alias, it may look like this: "lenovo-x200-p.199"
+# in the above case, "-" was chosen as the name delimiter while "." as the id delimiter
 delimiters:
   id: -
   name: -
+# you will need to define your language and the default parser for each language here
+# in the next version the system should auto scan your languages list and set all to use default parser for you
 languages: 
   en: default
   ru: ru
 default:
+  # if ssu needs to parse a page and this page has no specific parser defined for it, which one should it use?
   parser: ParserStatic
   extension:
 # blocking the spiders?
 session_block_spiders: true
+
+parsers: [ParserProduct, ParserCategory, ParserPage]
+
 # a very special setting, please do not edit if you do not understand it
 redirect_extension: html
-pages: 
+
+# here we define the parser for each specific page
+pages:
   product_info:
     alias:
     extension:
@@ -60,13 +86,497 @@ pages:
     extension:
     identifier: c
     parser: ParserCategory
+  # here is a good example of using the default parser.
+  # we simple want to change index.php?main_page=contact_us into /contact_us
+  # we can either set the alias here, or via the alias manager in the admin backend
   contact_us:
     alias: contact_us
   page:
     identifier: page
     parser: ParserPage
-  
-# do not edit below this area  
+
+# a list of spiders
+spiders:
+    - bot
+    - robot
+    - crawl
+    - scrape
+    - search
+    - seek.
+    - seeker
+    - slurp
+    - spider
+    - msnbot
+    - abcdatos
+    - acme
+    - accoona
+    - acoon
+    - adressendeutschland
+    - ahoy
+    - alkaline
+    - almaden
+    - amfibibot
+    - amishbot
+    - ananzi
+    - answerbus
+    - anthill
+    - appie
+    - appie1.1
+    - arachnophilia
+    - arale
+    - araneo
+    - araybot
+    - architext
+    - architextspider
+    - aretha
+    - argus
+    - ariadne
+    - arks
+    - 'ask jeeves'
+    - aspider
+    - aspseek
+    - asterias
+    - atlocal
+    - atomz
+    - augurfind
+    - auresys
+    - avantgo
+    - backrub
+    - baiduspider
+    - bannana_bot
+    - bbot
+    - bdcindexer
+    - bdfetch
+    - becomebot
+    - 'big brother'
+    - bjaaland
+    - blackwidow
+    - blo.
+    - blog
+    - bloodhound
+    - boitho
+    - bonecho
+    - booch
+    - bordermanager
+    - borg-bot
+    - botlink
+    - boxseabot
+    - bruinbot
+    - bspider
+    - 'cactvs chemistry spider'
+    - cassandra
+    - ccubee
+    - cfetch
+    - charlotte
+    - checkbot
+    - cherrypicker
+    - christcrawler
+    - churl
+    - cienciaficcion.net
+    - clushbot
+    - collective
+    - comagent
+    - combine
+    - 'computingsite robi/1.0'
+    - confuzzledbot
+    - converacrawler
+    - coolbot
+    - csci
+    - curl
+    - cyberspyder
+    - cydralspider
+    - dataparksearch
+    - depspid
+    - dienstspider
+    - digger
+    - digimarc
+    - 'digital integrity robot'
+    - 'direct hit grabber'
+    - ditto
+    - dmoz
+    - dnabot
+    - 'download express'
+    - dragonbot
+    - dtaagent
+    - dumbot
+    - ebin
+    - ecollector
+    - 'eit link verifier robot'
+    - elfinbot
+    - ejupiter
+    - emailcollector
+    - emailsiphon
+    - esculapio
+    - exabot
+    - extractor
+    - e-societyrobot
+    - falcon
+    - facebook
+    - 'fast enterprise crawler'
+    - fastbug
+    - fastcrawler
+    - fast-webcrawler
+    - feedfetcher
+    - fetchrover
+    - filangy
+    - findlinks
+    - 'fish search'
+    - 'fluffy the spider'
+    - 'fluid dynamics search engine robot'
+    - focusedcrawler
+    - fouineur
+    - freecrawl
+    - frooglebot
+    - funnelweb
+    - fusionbot
+    - fyberspider
+    - gaisbot
+    - gammaspider
+    - gazz
+    - gcreep
+    - genie
+    - geobot
+    - geonabot
+    - getbot
+    - getterroboplus
+    - gigabot
+    - girafabot
+    - 'goldfire server'
+    - golem
+    - google
+    - gralon
+    - grapnel
+    - greywyvern
+    - griffon
+    - gromit
+    - grub
+    - gulliver
+    - gulperbot
+    - hï¿¤mï¿¤hï¿¤kki
+    - hÃ¤mÃ¤hÃ¤kki
+    - hamahakki
+    - hambot
+    - harvest
+    - helix
+    - heritrix
+    - holmes
+    - homer
+    - htdig
+    - henrythemiragorobot
+    - htmlgobble
+    - httpget
+    - httrack
+    - hyper-decontextualizer
+    - ia_archiver
+    - iajabot
+    - ibm_planetwide
+    - ichiro
+    - iconsurf
+    - iltrovatore-setaccio
+    - imagelock
+    - incywincy
+    - indexer
+    - inelabot
+    - informant
+    - infoseek
+    - infospiders
+    - ingrid
+    - 'inktomi slurp'
+    - inktomisearch
+    - inspectorbot
+    - intelliagentbot
+    - 'internet cruiser robot'
+    - 'internet shinchakubin'
+    - internetlinkagent
+    - irlbot
+    - irobot
+    - iron33
+    - israeli-search
+    - istarthere
+    - ivia
+    - jakarta
+    - javabee
+    - 'jbot java web robot'
+    - jcrawler
+    - jeeves
+    - jobo
+    - jobot
+    - joebot
+    - 'jubii indexing robot'
+    - jumpstation
+    - katipo
+    - kilroy
+    - kit-fireball
+    - knowledge
+    - ko_yappo_robot
+    - kretrieve
+    - labelgrabber
+    - lachesis
+    - larbin
+    - libwww-mget
+    - libwww-perl
+    - limebot
+    - 'link validator'
+    - linklint-checkonly
+    - linknzbot
+    - linkscan
+    - linkwalker
+    - lnspiderguy
+    - lockon
+    - lwp
+    - lycos_spider
+    - magpie
+    - mantraagent
+    - mapoftheinternet
+    - mattiebot
+    - mediafox
+    - mediapartners
+    - mercator
+    - merzscope
+    - metacarta
+    - metagerbot
+    - 'url control'
+    - mindcrawler
+    - minirank
+    - miva
+    - mj12bot
+    - mnogosearch
+    - moget
+    - momspider
+    - monsterbot
+    - msiecrawler
+    - msproxy
+    - 'muncher bot'
+    - muninn
+    - muscatferret
+    - mysterybot
+    - myweb
+    - nationaldirectory
+    - nameprotect
+    - nazilla
+    - ncsa
+    - naverbot
+    - naverbot_dloader
+    - naverrobot
+    - ndspider
+    - nec-meshexplorer
+    - nederland.zoek
+    - neomo
+    - 'netcarta webmap engine'
+    - netmechanic
+    - netnosecrawler
+    - netresearchserver
+    - netscoop
+    - newscan-online
+    - nextgensearchbot
+    - ng-search
+    - northstar
+    - noyona
+    - npbot
+    - 'nusearch spider'
+    - nutch
+    - 'nwi robot'
+    - nzexplorer
+    - objectssearch
+    - obot
+    - occam
+    - ocelli
+    - omni
+    - 'online link'
+    - ontospider
+    - openbot
+    - 'openfind data gatherer'
+    - 'orb search'
+    - orca
+    - osis-project
+    - 'pack rat'
+    - pageboy
+    - pagebull
+    - panscient
+    - parasite
+    - patric
+    - patwebbot
+    - peerbot
+    - pegasus
+    - peregrinator
+    - 'perlcrawler 1.0'
+    - phantom
+    - phpdig
+    - pico
+    - piltdownman
+    - pimptrain
+    - pipeliner
+    - plumtreewebaccessor
+    - polybot
+    - pompos
+    - poppelsdorf
+    - psycheclone
+    - publisher
+    - python
+    - 'poodle predictor 1.0'
+    - poppi
+    - 'popular iconoclast'
+    - 'portal juice spider'
+    - 'portal manager'
+    - 'portalb spider'
+    - psbot
+    - 'python robot'
+    - quepasacreep
+    - rambler
+    - 'raven search'
+    - 'rbse spider'
+    - 'resume robot'
+    - rixbot
+    - 'road runner'
+    - 'roadhouse crawling system'
+    - 'robbie the robot'
+    - 'robocrawl spider'
+    - robofox
+    - robopal
+    - robot
+    - 'robot francoroute'
+    - robozilla
+    - roverbot
+    - rpt-httpclient
+    - safaribookmarkchecker
+    - 'safetynet robot'
+    - salty
+    - sbider
+    - scooter
+    - scout
+    - scrubby
+    - senrigan
+    - sensis
+    - seosearch
+    - seventwentyfour
+    - shagseeker
+    - 'shai''hulud'
+    - shopwiki
+    - sidewinder
+    - sift
+    - 'simmany robot ver1.0'
+    - sitetech-rover
+    - skymob.com
+    - slcrawler
+    - sleek
+    - 'smart spider'
+    - snappy
+    - snooper
+    - sohu
+    - solbot
+    - speedfind
+    - speedy
+    - sphider
+    - spinner
+    - 'spry wizard robot'
+    - spurlbot
+    - spyder
+    - sqworm
+    - steeler
+    - suke
+    - suntek
+    - surf
+    - sven
+    - sygol
+    - szukacz
+    - 'tach black widow'
+    - tarantula
+    - tarspider
+    - techbot
+    - templeton
+    - teoma
+    - theophrastus
+    - thesubot
+    - thumbshots-de-bot
+    - t-h-u-n-d-e-r-s-t-o-n-e
+    - titan
+    - titin
+    - tlspider
+    - tulipchain
+    - turnitinbot
+    - tutorgigbot
+    - twiceler
+    - twisted
+    - 'ucsd crawl'
+    - udmsearch
+    - ultraseek
+    - unchaos_crawler
+    - uptimebot
+    - usyd-nlp-spider
+    - vagabondo
+    - valkyrie
+    - verticrawl
+    - vision-search
+    - void-bot
+    - voilabot
+    - volcano
+    - voyager
+    - vspider
+    - vwbot
+    - 'walhello appie'
+    - wallpaper
+    - wauuu
+    - webbandit
+    - webcatcher
+    - webcopy
+    - 'webcore / roots'
+    - webfetcher
+    - webfoot
+    - 'web hoper'
+    - 'web hopper'
+    - webinator
+    - webinator-indexer
+    - weblayers
+    - weblinker
+    - weblog
+    - webmirror
+    - webmoose
+    - webquest
+    - webrace
+    - webreaper
+    - websauger
+    - websearch
+    - websnarf
+    - webspider
+    - webstolperer
+    - webvac
+    - webwalk
+    - webwalker
+    - webwatch
+    - wombat
+    - 'webyield robot'
+    - webzinger
+    - wget
+    - whatuseek
+    - whizbang
+    - whowhere
+    - wild
+    - wildferret
+    - wisenut
+    - worio
+    - worldlight
+    - xenu
+    - xget
+    - xift
+    - xirq
+    - xyleme
+    - yacybot
+    - 'yahoo! slurp'
+    - yahoo-mmcrawler
+    - yahooseeker
+    - yandex
+    - yeti
+    - yodao
+    - yottacars_bot
+    - zao/0
+    - zao-crawler
+    - zermelo
+    - zipppbot
+    - zoomspider
+    - zyborg
+    - zyborg/1.0
+
+# you should not edit anything below this point
 routes:
   ssu:
     pattern:  /ssu/

@@ -51,24 +51,25 @@ class ParserCategory extends Parser{
         $category_ids = explode('_', $cPath);
         $cat_count = count($category_ids);
 
-        $counter = $cat_count - (int)Plugin::get('settings')->get('riSsu.category_maximum_level');
+        $maximum_level = (int)Plugin::get('settings')->get('riSsu.category_maximum_level');
 
-        if($counter < 0) $counter = 0;
-
+        if($maximum_level < 0) $maximum_level = 0;
         $_name = array();
+
         // this may not be the best way to build the category name, but we do this once per cPath only
-        while($counter <= ($cat_count-1)){
-            $category_ids[$counter] = (int)$category_ids[$counter];
-            $sql_query = "SELECT categories_name FROM ".$this->table." WHERE categories_id ='".$category_ids[$counter]."' AND language_id= '$languages_id' LIMIT 1";
+        while($maximum_level > 0 && $cat_count >0){
+            $maximum_level--;
+            $cat_count--;
+            $category_ids[$cat_count] = (int)$category_ids[$cat_count];
+            $sql_query = "SELECT categories_name FROM ".$this->table." WHERE categories_id ='".$category_ids[$cat_count]."' AND language_id= '$languages_id' LIMIT 1";
             $__name = $this->getNameFromDB($sql_query, $this->name_field);
             // fall back to default language
             if(empty($__name) && $languages_id != 0){
-                $sql_query = "SELECT categories_name FROM ".$this->table." WHERE categories_id ='".$category_ids[$counter]."' AND language_id = 1 LIMIT 1";
+                $sql_query = "SELECT categories_name FROM ".$this->table." WHERE categories_id ='".$category_ids[$cat_count]."' AND language_id = 1 LIMIT 1";
                 $__name = $this->getNameFromDB($sql_query, $this->name_field);
             }
 
-            $_name[] = Plugin::get('riSsu.Language')->parseName($__name, $languages_code);
-            $counter++;
+            array_unshift($_name, Plugin::get('riSsu.Language')->parseName($__name, $languages_code));
         }
 
         if(empty($_name)) $_name = Plugin::get('riSsu.Language')->parseName($this->name_field, $languages_code);

@@ -286,16 +286,17 @@ class Link {
         foreach($_get as $key => $value)
             $params .= '&' . $key . '=' . $value;
 
-        $regenerated_link = $this->link($page, $params, $request_type, true, true, false, true, false);
+        $add_session = true;
+        if($session_flag && $this->spider && Plugin::get('settings')->get('riSsu.session_block_spiders') ){
+            $add_session = false;
+        }
+
+        $regenerated_link = $this->link($page, $params, $request_type, $add_session, true, false, true, false);
 
         $current_url = trim($this->getPageBase(), '/') . $_request_uri;
 
         // as long as we think the regenerated url fits in the current url, we are ok 
         if($regenerated_link != '' && strpos($current_url, $regenerated_link) != false){
-            $this->redirect($regenerated_link);
-        }
-
-        if($session_flag && $this->spider && Plugin::get('settings')->get('riSsu.session_block_spiders') ){
             $this->redirect($regenerated_link);
         }
     }
@@ -392,7 +393,7 @@ class Link {
         }
 
         // Build session id        
-        if ( !$this->spider && ($add_session_id == true) && ($session_started == true) && (SESSION_FORCE_COOKIE_USE == 'False') ) {
+        if ( $add_session_id == true && ($session_started == true) && (SESSION_FORCE_COOKIE_USE == 'False') ) {
             if (defined('SID') && zen_not_null(SID)) {
                 $sid = SID;
             } elseif ( ($connection == 'SSL' && ENABLE_SSL == 'true') || ($connection == 'NONSSL') ) {
@@ -428,10 +429,10 @@ class Link {
         if(!empty($page) || !empty($parameters['static'])){
             if(!empty($extension))
                 $link .= $extension;
-            else
+            elseif(Plugin::get('settings')->get('riSsu.trailing_slash'))
                 $link .= '/';
         }
-        else
+        elseif(Plugin::get('settings')->get('riSsu.trailing_slash'))
             $link .= '/';
 
         // append sid
