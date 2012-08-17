@@ -86,6 +86,11 @@ pages:
     extension:
     identifier: c
     parser: ParserCategory
+  manufacturers:
+    alias:
+    extension:
+    identifier: m
+    parser: ParserManufacturer
   # here is a good example of using the default parser.
   # we simple want to change index.php?main_page=contact_us into /contact_us
   # we can either set the alias here, or via the alias manager in the admin backend

@@ -80,9 +80,7 @@ class Link {
         if(isset($_GET['main_page'])){
 
             // there are certain pages we need to assign new key to it
-            $page = $_GET['main_page'];
-            if($_GET['main_page'] == 'index' && isset($_GET['cPath']))
-                $page = 'categories';
+            $page = $this->getPageKey($_GET['main_page'], $_GET);
 
             if (!array_key_exists($page, Plugin::get('settings')->get('riSsu.pages'))) return false;
         }
@@ -357,7 +355,7 @@ class Link {
         // if this is anything other than index.php, dont ssu it
         if(strpos($page, '.php') !== false && strpos($page, 'index.php') === false) return false;
 
-        if(!empty($parameters) || !empty($page)){
+        //if(!empty($parameters) || !empty($page)){
             // this is for the way ZC builds ezpage links. $page is empty and $parameters contains main_page
             // remember. non-static links always have index.php?main_page=
             // so first we check if this is static
@@ -382,15 +380,14 @@ class Link {
             // if we reach this step with an empty $page, let zen handle the job
             if (empty($page)) return false;
 
-            if($page == 'index' && strpos($parameters, 'cPath=') !== false)
-                $page = 'categories';
+            $page = $this->getPageKey($_get, $parameters);
 
             $this->current_page = $page;
             // if this page is our exclude list, let zen handle the job
             if (!array_key_exists($page, Plugin::get('settings')->get('riSsu.pages'))) return false;
 
             $parameters = $this->parseParams($languages_code, $page, $parameters, $extension);
-        }
+        //}
 
         // Build session id        
         if ( $add_session_id == true && ($session_started == true) && (SESSION_FORCE_COOKIE_USE == 'False') ) {
@@ -509,6 +506,16 @@ class Link {
         // note that there is a draw back here: we are attemthing to read cache file for every single link
         // but on another hand we may avoid querying the database for aliases
         return array('static' => isset($params['static']) ? $params['static'] : '', 'dynamic' => isset($params['dynamic']) ? $params['dynamic'] : '');
+    }
+
+    private function getPageKey($page, $parameters){
+        if(is_string($parameters)) parse_str($parameters, $parameters);
+        if($page == 'index')
+            if(isset($parameters['cPath']))
+                $page = 'categories';
+            elseif(isset($parameters['manufacturers_id']))
+                $page = 'manufacturers';
+        return $page;
     }
 
     function getLanguagesID($languages_code){
