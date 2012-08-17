@@ -380,7 +380,7 @@ class Link {
             // if we reach this step with an empty $page, let zen handle the job
             if (empty($page)) return false;
 
-            $page = $this->getPageKey($_get, $parameters);
+            $page = $this->getPageKey($page, $parameters);
 
             $this->current_page = $page;
             // if this page is our exclude list, let zen handle the job
