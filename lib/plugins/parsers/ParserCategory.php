@@ -57,7 +57,7 @@ class ParserCategory extends Parser{
         $_name = array();
 
         // this may not be the best way to build the category name, but we do this once per cPath only
-        while($maximum_level > 0 && $cat_count >0){
+        while($maximum_level > 0 && $cat_count > 0){
             $maximum_level--;
             $cat_count--;
             $category_ids[$cat_count] = (int)$category_ids[$cat_count];
@@ -94,8 +94,17 @@ class ParserCategory extends Parser{
         return $name;
     }
 
-    protected function processName(&$name){
+    /**
+     * {@inheritdoc}
+     */
+    public function getPageKey(&$page_key, $page, $parameters){
+        if(is_string($parameters)) parse_str($parameters, $parameters);
+        if($page == 'index' && isset($parameters['cPath'])){
+            $page_key = 'categories';
+            return true;
+        }
 
+        return false;
     }
 
     public function getParentCategoriesIds(&$categories, $categories_id) {
@@ -105,5 +114,9 @@ class ParserCategory extends Parser{
             $categories[] = $category['parent_id'];
             $this->getParentCategoriesIds($categories, $category['parent_id']);
         }
+    }
+
+    protected function processName(&$name){
+
     }
 }

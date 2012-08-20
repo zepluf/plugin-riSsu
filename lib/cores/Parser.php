@@ -121,7 +121,19 @@ class Parser{
 
         return $name;
     }
-	
+
+    /**
+     * This function will map the main page key, useful for pages sharing same main page such as
+     * categories or manufacturers
+     * @param $page
+     * @param $parameters
+     * @return string
+     */
+    public function getPageKey(&$page_key, $page, $parameters){
+        $page_key = $page;
+        return false;
+    }
+
 	protected function getNameFromDB($sql_query, $name_field){
 		global $db;
 		$result = '';

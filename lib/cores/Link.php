@@ -19,10 +19,7 @@
  */
 namespace plugins\riSsu\cores;
 
-use Symfony\Component\Validator\Constraints\Email;
-
 use plugins\riPlugin\Plugin;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * SSU rewriter.
@@ -55,7 +52,7 @@ class Link {
         // we need to know if a spider is visit us
         if(!isset($_SESSION['spider_flag'])){
             $_SESSION['spider_flag'] = false;
-            $spiders = Plugin::get('settings')->get('riSsu.spiders');
+            $spiders = Plugin::get('settings')->get('riSsu.spiders', array());
             $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
             foreach($spiders as $spider){
                 if(strpos($user_agent, $spider) !== false){
@@ -80,7 +77,11 @@ class Link {
         if(isset($_GET['main_page'])){
 
             // there are certain pages we need to assign new key to it
-            $page = $this->getPageKey($_GET['main_page'], $_GET);
+            $page = $_GET['main_page'];
+            foreach (Plugin::get('settings')->get('riSsu.parsers') as $parser){
+                if(Plugin::get('riSsu.'.$parser)->getPageKey($page, $_GET['main_page'], $_GET))
+                    break;
+            }
 
             if (!array_key_exists($page, Plugin::get('settings')->get('riSsu.pages'))) return false;
         }
@@ -380,7 +381,10 @@ class Link {
             // if we reach this step with an empty $page, let zen handle the job
             if (empty($page)) return false;
 
-            $page = $this->getPageKey($page, $parameters);
+            foreach (Plugin::get('settings')->get('riSsu.parsers') as $parser){
+                if(Plugin::get('riSsu.'.$parser)->getPageKey($page, $page, $parameters))
+                    break;
+            }
 
             $this->current_page = $page;
             // if this page is our exclude list, let zen handle the job
@@ -506,16 +510,6 @@ class Link {
         // note that there is a draw back here: we are attemthing to read cache file for every single link
         // but on another hand we may avoid querying the database for aliases
         return array('static' => isset($params['static']) ? $params['static'] : '', 'dynamic' => isset($params['dynamic']) ? $params['dynamic'] : '');
-    }
-
-    private function getPageKey($page, $parameters){
-        if(is_string($parameters)) parse_str($parameters, $parameters);
-        if($page == 'index')
-            if(isset($parameters['cPath']))
-                $page = 'categories';
-            elseif(isset($parameters['manufacturers_id']))
-                $page = 'manufacturers';
-        return $page;
     }
 
     function getLanguagesID($languages_code){
