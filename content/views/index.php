@@ -12,7 +12,7 @@ var $list;
 jQuery(document).ready(function(){ 
  
 jQuery("#list").jqGrid({ 
-	url:'<?php echo $router->generate('ssu_alias_list');?>', 
+	url:'<?php echo $router->generate('rissu_admin_alias_list');?>',
 	datatype: "json", 
 	jsonReader : {
 
@@ -46,7 +46,7 @@ jQuery("#list").jqGrid({
 	multiselect: true,
 	sortorder: "desc", 
 	caption: 'Your link aliases', 
-	editurl: '<?php echo $router->generate('ssu_alias_edit');?>', 
+	editurl: '<?php echo $router->generate('rissu_admin_alias_edit');?>',
 	height:450 }).navGrid('#pager', {}, //options 
 	{height:280,width:420,reloadAfterSubmit:true}, // edit options 
 	{height:280,width:420,reloadAfterSubmit:true}, // add options 
@@ -63,9 +63,9 @@ jQuery("#list").jqGrid({
 </fieldset>
 <fieldset>
 	<legend>Cache Functions</legend>
-	Reset all cache: <a href="<?php echo $router->generate('ssu_reset', array('folder' => 'all')); ?>">Click here</a><br />
-	Reset alias cache: <a href="<?php echo $router->generate('ssu_reset', array('folder' => 'aliases')); ?>">Click here</a><br />		
-	Reset product/category cache: <a href="<?php echo $router->generate('ssu_reset', array('folder' => 'pc')); ?>">Click here</a><br />
+	Reset all cache: <a href="<?php echo $router->generate('rissu_admin_reset', array('folder' => 'all')); ?>">Click here</a><br />
+	Reset alias cache: <a href="<?php echo $router->generate('rissu_admin_reset', array('folder' => 'aliases')); ?>">Click here</a><br />
+	Reset product/category cache: <a href="<?php echo $router->generate('rissu_admin_reset', array('folder' => 'pc')); ?>">Click here</a><br />
 </fieldset>
 
 <br /><br />

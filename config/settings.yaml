@@ -583,16 +583,16 @@ spiders:
 
 # you should not edit anything below this point
 routes:
-  ssu:
-    pattern:  /ssu/
+  admin_index:
+    pattern:  /index/
     defaults: { _controller: plugins\riSsu\AdminController::indexAction }
-  ssu_reset:
-    pattern:  /ssu/reset/
+  admin_reset:
+    pattern:  /reset/
     defaults: { _controller: plugins\riSsu\AdminController::resetAction }    
-  ssu_alias_list:
-    pattern:  /ssu/alias/list/
+  admin_alias_list:
+    pattern:  /alias/list/
     defaults: { _controller: plugins\riSsu\AdminController::aliasListAction }  
-  ssu_alias_edit:
+  admin_alias_edit:
     pattern:  /ssu/alias/edit/
     defaults: { _controller: plugins\riSsu\AdminController::aliasEditAction }  
             
@@ -600,4 +600,4 @@ global:
   backend:
     menu:
       extras:
-        - {text: Simple Seo Url Manager, link: ri.php/ssu/}        
+        - {text: Simple Seo Url Manager, link: ri.php/rissu/index/}
