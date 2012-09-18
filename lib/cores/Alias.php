@@ -88,7 +88,7 @@ class Alias{
 		$this->retrieveAliasesOnDemand($params, 'link_url', '_links', '_links', '_aliases', 1);
 		$_params = str_replace($this->_links, $this->_aliases, "/$params/", $count);
 		
-		if($count > 0 && $_params != $params){
+		if($count > 0 && $_params != "/$params/"){
 			$params = trim($_params, '/');
 			return true;
 		}

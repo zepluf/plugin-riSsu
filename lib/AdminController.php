@@ -16,7 +16,7 @@ class AdminController extends Controller{
 
     public function indexAction(Request $request){
         $this->container->get('templating.holder')->add('main', $this->view->render('riSsu::index.php'));
-        return $this->render('riSsu::admin_layout');
+        return $this->render('riZCAdmin::backend/layout');
     }
 
     public function aliasListAction(Request $request){
@@ -129,7 +129,7 @@ class AdminController extends Controller{
 
         $this->container->get('templating.holder')->add('main', ri('%counter% files removed', array('%counter%' => $counter)))
         ->add('main', $this->view->render('riSsu::index.php'));
-        return $this->render('riSsu::admin_layout');
+        return $this->render('riZCAdmin::backend/layout');
     }
     
     private function removeCache($id_list){

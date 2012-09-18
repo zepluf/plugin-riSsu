@@ -97,24 +97,23 @@ class Link {
 
         // we need to remove the extension first                        
         if(!$is_dynamic_link){
-            $file_extension = pathinfo(parse_url($request_uri, PHP_URL_PATH), PATHINFO_EXTENSION);
-            if(!empty($file_extension)) {
-                //$defined_extension = Plugin::get('settings')->get('riSsu.file_extension', '');
+            $extension = pathinfo(parse_url($request_uri, PHP_URL_PATH), PATHINFO_EXTENSION);
+            if(!empty($extension)) {
+                //$defined_extension = Plugin::get('settings')->get('riSsu.extension', '');
                 // hack for abc
                 $redirect_extension = Plugin::get('settings')->get('riSsu.redirect_extension', '');
                 // if the request is redirected, it means the path is not found on server
                 // if the extension does not match what we are expected, it means this is really
                 // an invalid request and 404 status should be returned
-                if((!empty($file_extension) && $redirect_extension != $file_extension) && (empty($defined_extension) || $defined_extension != $file_extension)){
-                    $response = new Response('', 404);
-                    $response->send();
+                if((!empty($extension) && $redirect_extension != $extension) && (empty($defined_extension) || $defined_extension != $extension)){
+                    zen_redirect(zen_href_link(FILENAME_PAGE_NOT_FOUND), 404);
                     exit();
                 }
 
                 // the extension matches what we expect, lets remove it from the link anyhow. It's just
                 // for show
                 if(!empty($defined_extension)){
-                    $request_uri = str_replace($file_extension, '', $request_uri);
+                    $request_uri = str_replace($extension, '', $request_uri);
                 }
             }
         }
@@ -305,18 +304,17 @@ class Link {
         if($_SERVER["REQUEST_METHOD"] == 'POST')
             $_SESSION['ssu_post'] = $_POST;
 
-        $response = new Response('', 301, array('Location' => $link));
-        $response->send();
+        zen_redirect($link, 301);
         exit();
     }
 
     /**
-     * Enter description here...
+     * Rebuild the $_GET and $_REQUEST
      *
      * @param string $_get
      */
     private function rebuildENV($ssu_get, $catalog_dir){
-        $_GET = array_merge($_GET, $ssu_get);
+        $_GET = $ssu_get;
         $_REQUEST = array_merge($_REQUEST, $_GET);
         // rebuild $PHP_SELF which is used by ZC in several places
         $GLOBALS['PHP_SELF'] = $catalog_dir.'index.php';
@@ -357,40 +355,40 @@ class Link {
         if(strpos($page, '.php') !== false && strpos($page, 'index.php') === false) return false;
 
         //if(!empty($parameters) || !empty($page)){
-            // this is for the way ZC builds ezpage links. $page is empty and $parameters contains main_page
-            // remember. non-static links always have index.php?main_page=
-            // so first we check if this is static
-            if(strpos($page, 'main_page=') !== false){
-                $parameters = $page;
-            }
+        // this is for the way ZC builds ezpage links. $page is empty and $parameters contains main_page
+        // remember. non-static links always have index.php?main_page=
+        // so first we check if this is static
+        if(strpos($page, 'main_page=') !== false){
+            $parameters = $page;
+        }
 
-            // remove index.php? if exists
-            if(($index_start = strpos($parameters, 'index.php?')) !== false) $parameters = substr($parameters, $index_start+10);
+        // remove index.php? if exists
+        if(($index_start = strpos($parameters, 'index.php?')) !== false) $parameters = substr($parameters, $index_start+10);
 
-            // put the "page" into $page, and the rest into $parameters
-            if((strpos($parameters, 'main_page=')) !== false){
-                parse_str($parameters, $_get);
-                $page = $_get['main_page'];
-                unset($_get['main_page']);
-                $parameters = http_build_query($_get);
-            }
-            elseif($static && empty($parameters)){
-                return false;
-            }
+        // put the "page" into $page, and the rest into $parameters
+        if((strpos($parameters, 'main_page=')) !== false){
+            parse_str($parameters, $_get);
+            $page = $_get['main_page'];
+            unset($_get['main_page']);
+            $parameters = http_build_query($_get);
+        }
+        elseif($static && empty($parameters)){
+            return false;
+        }
 
-            // if we reach this step with an empty $page, let zen handle the job
-            if (empty($page)) return false;
+        // if we reach this step with an empty $page, let zen handle the job
+        if (empty($page)) return false;
 
-            foreach (Plugin::get('settings')->get('riSsu.parsers') as $parser){
-                if(Plugin::get('riSsu.'.$parser)->getPageKey($page, $page, $parameters))
-                    break;
-            }
+        foreach (Plugin::get('settings')->get('riSsu.parsers') as $parser){
+            if(Plugin::get('riSsu.'.$parser)->getPageKey($page, $page, $parameters))
+                break;
+        }
 
-            $this->current_page = $page;
-            // if this page is our exclude list, let zen handle the job
-            if (!array_key_exists($page, Plugin::get('settings')->get('riSsu.pages'))) return false;
+        $this->current_page = $page;
+        // if this page is our exclude list, let zen handle the job
+        if (!array_key_exists($page, Plugin::get('settings')->get('riSsu.pages'))) return false;
 
-            $parameters = $this->parseParams($languages_code, $page, $parameters, $extension);
+        $parameters = $this->parseParams($languages_code, $page, $parameters, $extension);
         //}
 
         // Build session id        
@@ -457,7 +455,7 @@ class Link {
         $params = $excluded_queries = array();
         $languages_id = isset($_SESSION['languages_id']) ? (int)$_SESSION['languages_id'] : 1;
         $_get = array('main_page' => $page);
-        $extension = Plugin::get('settings')->get('riSsu.file_extension');
+        $extension = Plugin::get('settings')->get('riSsu.extension', '');
 
         // parse into an array
         parse_str($parameters, $parameters);
@@ -487,7 +485,7 @@ class Link {
 
             Plugin::get('riSsu.'.$options['parser'])->processPage($page, $mapped_page['alias']);
 
-            $extension = isset($mapped_page['extension']) ? $mapped_page['extension'] : Plugin::get('settings')->get('riSsu.file_extension');
+            $extension = isset($mapped_page['extension']) ? $mapped_page['extension'] : Plugin::get('settings')->get('riSsu.extension', '');
 
             $set_cache = true;
         }

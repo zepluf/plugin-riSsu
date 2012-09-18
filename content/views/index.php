@@ -1,9 +1,7 @@
 <?php $riview->get('loader')->load(array(
 	'jquery.lib', 
 	'jquery.ui.lib', 
-	'riSsu::jqGrid/css/ui.jqgrid.css',
-    'riSsu::jqGrid/js/i18n/grid.locale-en.js',
-	'riSsu::jqGrid/jquery.jqGrid.js',
+	'jqGrid.lib'
 ))?>
 
 <?php $riview->get('loader')->startInline('js');?>
